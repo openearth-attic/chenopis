@@ -1,3 +1,6 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 !
 !     SWAN/COMPU    file 1 of 5
 !
@@ -969,7 +972,7 @@
 
 #ifdef HAVE_MPI
           ALLOCATE(AC2LOC(MCGRD))                                             40.30
-    
+
 #endif
       ALLOCATE(SWTSDA(MDC,MSC,NPTSTA,MTSVAR))                             40.31
       SWTSDA = 0.                                                         40.41
@@ -1006,7 +1009,7 @@
 !     End initialization shared arrays.                                   40.31
 !----------------------------------------------------------------------   40.31
 #ifdef HAVE_TIMG
-     
+
            CALL SWTSTO(101)                                                    40.23
 #endif
 
@@ -1038,7 +1041,7 @@
 !$   +      OMP_GET_NUM_THREADS()                                         41.10 40.22
 !$OMP END MASTER                                                          40.22
 #ifdef HAVE_TIMG
-     
+
            CALL SWTSTA(101)                                                    40.23
 #endif
 
@@ -1155,7 +1158,7 @@
 !----------------------------------------------------------------------   40.31
 !$OMP BARRIER                                                             40.31
 #ifdef HAVE_TIMG
-     
+
            CALL SWTSTO(101)                                                    40.23
 #endif
 
@@ -1629,7 +1632,7 @@
     !             row within distributed-memory environment                   40.30
     !                                                                         40.30
     ! ======================================================================  40.30
-    
+
 #endif
 #ifdef HAVE_TIMG
      !MPI              CALL SWTSTA(213)                                            40.30
@@ -1731,7 +1734,7 @@
     !             within distributed-memory environment                       40.30
     !                                                                         40.30
     ! ======================================================================  40.30
-    
+
 #endif
 #ifdef HAVE_TIMG
      !MPI              CALL SWTSTA(213)                                            40.30

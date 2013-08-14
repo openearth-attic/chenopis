@@ -1,3 +1,6 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 !
 !     SWAN main program and miscellaneous routines
 !

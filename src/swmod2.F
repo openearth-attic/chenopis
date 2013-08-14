@@ -1,3 +1,6 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 !                 ALLOCATABLE DATA RELATED MODULES, file 2 of 3
 !
 !     Contents of this file

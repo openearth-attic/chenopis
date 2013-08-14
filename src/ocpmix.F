@@ -1,3 +1,6 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 !     Ocean Pack miscellaneous routines
 !
 !     real function DTTIME

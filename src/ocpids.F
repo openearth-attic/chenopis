@@ -1,3 +1,6 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 !     Last change:  NB   04 Jan 2001   12:00 pm
 !
 !          OCEAN PACK - Installation dependent subroutines

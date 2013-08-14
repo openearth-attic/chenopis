@@ -1,3 +1,6 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 subroutine SwanConvStopc ( accur, hscurr, hsprev, hsdifc, tmcurr, tmprev, tmdifc, delhs, deltm, xytst, spcsig, ac2, ivlow, ivup )
 !
 !   --|-----------------------------------------------------------|--

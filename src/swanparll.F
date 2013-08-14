@@ -1,3 +1,6 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 !
 !     SWAN - routines for distributed-memory approach based on MPI
 !

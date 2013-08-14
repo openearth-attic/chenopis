@@ -1,3 +1,6 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 !
 !     SWAN - SERVICE ROUTINES
 !
@@ -5821,7 +5824,7 @@
      !
      ! 13. Source text
      !
-     
+
      !
      !     --- check whether a valid timer number is given
      !
@@ -5847,7 +5850,7 @@
               END IF
               GOTO 100
            END IF
-     
+
            IF (IFOUND.EQ.0 .AND. IFREE.EQ.0 .AND. LASTTM.LT.MXTIMR) THEN
               LASTTM=LASTTM+1
               IFREE =LASTTM
@@ -5884,10 +5887,10 @@
      !F95      TIMER1=DBLE(TIMER)
            CALL SYSTEM_CLOCK (C,R,M)
            TIMER2=DBLE(C)/DBLE(R)
-     
+
            TIMERS(IFOUND,1)=TIMER1
            TIMERS(IFOUND,2)=TIMER2
-     
+
            RETURN
            END
      !****************************************************************
@@ -5991,7 +5994,7 @@
      !
      ! 13. Source text
      !
-     
+
      !
      !     --- check whether a valid timer number is given
      !
@@ -6050,7 +6053,7 @@
               GOTO 200
            END IF
            IF (LISTTM(LASTTM).EQ.-1) LASTTM=0
-     
+
            RETURN
            END
      !****************************************************************
@@ -6063,7 +6066,7 @@
            USE TIMECOMM                                                        40.41
            USE M_PARALL                                                        40.31
      !PUN      USE SIZES, ONLY: MNPROC, MYPROC                                     40.95
-     
+
            IMPLICIT NONE
      !
 #endif
@@ -6278,7 +6281,7 @@
      !           --- vegetation:
      !
                  TABLE(29,J) = TABLE(29,J) + DCUMTM(139,J)
-     
+
               END DO
      !
      !        --- add up times for some basic blocks
@@ -6333,7 +6336,7 @@
                  TABLE(13,J) = TABLE(13,J) - TABLE( 9,J)
                  TABLE(13,J) = TABLE(13,J) - TABLE(12,J)
                  IF ( TABLE(13,J).LT.0D0 ) TABLE(13,J) = 0D0
-     
+
               END DO
      !
      !        --- print CPU-times used in important parts of SWAN
@@ -6382,9 +6385,9 @@
               WRITE(PRINTF,115) MYPRC,'rescaling:'       ,(TABLE(25,j),j=1,2)
               WRITE(PRINTF,115) MYPRC,'reflections:'     ,(TABLE(26,j),j=1,2)
               WRITE(PRINTF,115) MYPRC,'diffraction:'     ,(TABLE(27,j),j=1,2)
-     
+
            END IF
-     
+
            IF ( IDEBUG.GE.2 ) THEN
               WRITE(PRINTF,120) MYPRC
               DO J = 1, NSECTM
@@ -6393,17 +6396,17 @@
           &                           NCUMTM(J)
               END DO
            END IF
-     
+
        110 FORMAT(i3,1x,'#')
        111 FORMAT(i3,' # Details on timings of the simulation:')
        112 FORMAT(i3,1x,'#',26x,'cpu-time',1x,'wall-clock')
        113 FORMAT(i3,' # Splitting up calc. + comm. times:')
        114 FORMAT(i3,' # Overview source contributions:')
        115 FORMAT(i3,1x,'#',1x,a22,2f11.2)
-     
+
        120 FORMAT(/,i3,' #    item     cpu-time    real time     count')
        121 FORMAT(i3,1x,'#',4x,i4,2f13.4,i10)
-     
+
            RETURN
            END
 #endif

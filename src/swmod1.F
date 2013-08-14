@@ -1,3 +1,6 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 !                 COMMON VARIABLES RELATED MODULES, file 1 of 3
 !
 !     Contents of this file

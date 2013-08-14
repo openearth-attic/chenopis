@@ -1,3 +1,6 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 subroutine SwanGridFace ( nfaces, ncells, nverts, xcugrd, ycugrd, kvertf )
 !
 !   --|-----------------------------------------------------------|--

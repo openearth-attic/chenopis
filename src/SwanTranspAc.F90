@@ -1,3 +1,6 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 subroutine SwanTranspAc ( amat  , rhs   , leakcf, ac2   , ac1   , &
                           cgo   , cax   , cay   , cad   , cas   , &
                           anybin, rdx   , rdy   , spcsig, spcdir, &
