@@ -35,7 +35,7 @@
 !
 
 
-      program HotConcat
+      PROGRAM HotConcat
 
       implicit none
       character(1024) RLINE

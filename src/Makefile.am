@@ -74,7 +74,8 @@ chenopis_SOURCES=\
 hcat_SOURCES=swanhcat.F
 
 
-unhcat_SOURCES=HottifySWAN
+unhcat_SOURCES=HottifySWAN.F90
+
 
 
 

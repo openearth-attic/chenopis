@@ -1,8 +1,7 @@
-#ifdef HAVE_NADC
-     subroutine SwanComputeForce ( fx, fy, ac2, dep2, spcsig, spcdir )
-#endif
 #ifdef HAVE_ADC
     subroutine SwanComputeForce
+#else
+      subroutine SwanComputeForce ( fx, fy, ac2, dep2, spcsig, spcdir )
 #endif
 !
 !   --|-----------------------------------------------------------|--
@@ -69,7 +68,7 @@
 #endif
 !
     implicit none
-#ifdef HAVE_NADC
+#ifndef HAVE_ADC
      !
      !   Argument variables
      !

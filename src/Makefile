@@ -96,7 +96,7 @@ chenopis_LDADD = $(LDADD)
 am_hcat_OBJECTS = swanhcat.$(OBJEXT)
 hcat_OBJECTS = $(am_hcat_OBJECTS)
 hcat_LDADD = $(LDADD)
-am_unhcat_OBJECTS =
+am_unhcat_OBJECTS = HottifySWAN.$(OBJEXT)
 unhcat_OBJECTS = $(am_unhcat_OBJECTS)
 unhcat_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)
@@ -110,10 +110,6 @@ PPFCCOMPILE = $(FC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 FCLD = $(FC)
 FCLINK = $(FCLD) $(AM_FCFLAGS) $(FCFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o \
 	$@
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-CCLD = $(CC)
-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(chenopis_SOURCES) $(hcat_SOURCES) $(unhcat_SOURCES)
 DIST_SOURCES = $(chenopis_SOURCES) $(hcat_SOURCES) $(unhcat_SOURCES)
 am__can_run_installinfo = \
@@ -138,7 +134,7 @@ ECHO_T =
 EXEEXT = 
 F77 = gfortran
 FC = gfortran
-FCFLAGS = -g -O2
+FCFLAGS = -g -O2 -ffree-form -ffree-line-length-none
 FCFLAGS_F90 = 
 FFLAGS = -g -O2
 INSTALL = /opt/local/bin/ginstall -c
@@ -275,7 +271,7 @@ chenopis_SOURCES = \
 	ocpmix.F
 
 hcat_SOURCES = swanhcat.F
-unhcat_SOURCES = HottifySWAN
+unhcat_SOURCES = HottifySWAN.F90
 all: all-am
 
 .SUFFIXES:
@@ -358,7 +354,7 @@ hcat$(EXEEXT): $(hcat_OBJECTS) $(hcat_DEPENDENCIES) $(EXTRA_hcat_DEPENDENCIES)
 	$(F77LINK) $(hcat_OBJECTS) $(hcat_LDADD) $(LIBS)
 unhcat$(EXEEXT): $(unhcat_OBJECTS) $(unhcat_DEPENDENCIES) $(EXTRA_unhcat_DEPENDENCIES) 
 	@rm -f unhcat$(EXEEXT)
-	$(LINK) $(unhcat_OBJECTS) $(unhcat_LDADD) $(LIBS)
+	$(FCLINK) $(unhcat_OBJECTS) $(unhcat_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
