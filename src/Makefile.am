@@ -1,24 +1,26 @@
 
-bin_PROGRAMS = chenopis
+bin_PROGRAMS=chenopis\
+	hcat \
+	unhcat
 
 chenopis_SOURCES=\
-	swmod1 \
-	swmod2 \
-	m_constants \
-	m_fileio \
-	serv_xnl4v5 \
-	mod_xnl4v5 \
-	SwanGriddat \
-	SwanGridobjects \
-	SwanCompdata.F90 \
-	swanmain.F \
-	swanpre1.F \
-	swanpre2.F \
+	swmod1.F \
+	swmod2.F \
 	swancom1.F \
 	swancom2.F \
 	swancom3.F \
 	swancom4.F \
 	swancom5.F \
+	m_constants.F \
+	m_fileio.F \
+	serv_xnl4v5.F90 \
+	mod_xnl4v5.F90 \
+	SwanGriddata.F90 \
+	SwanGridobjects.F90 \
+	SwanCompdata.F90 \
+	swanmain.F \
+	swanpre1.F \
+	swanpre2.F \
 	swanout1.F \
 	swanout2.F \
 	swanser.F \
@@ -69,11 +71,9 @@ chenopis_SOURCES=\
 	ocpcre.F \
 	ocpmix.F
 
-bin_PROGRAMS = hcat
 hcat_SOURCES=swanhcat.F
 
 
-bin_PROGRAMS=unhcat
 unhcat_SOURCES=HottifySWAN
 
 
