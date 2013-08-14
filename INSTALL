@@ -9,6 +9,14 @@ are permitted in any medium without royalty provided the copyright
 notice and this notice are preserved.  This file is offered as-is,
 without warranty of any kind.
 
+
+Prepare
+==================
+
+   To prepare the source for compilation type
+
+   ./autogen.sh
+
 Basic Installation
 ==================
 
