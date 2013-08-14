@@ -69,7 +69,30 @@ libchenopis_la_SOURCES=\
 	SwanMaxOverNodes.F90 \
 	ocpids.F \
 	ocpcre.F \
-	ocpmix.F
+	ocpmix.F \
+	swanapi.F
+
+if HAVE_BMI
+	libchenopis_la_SOURCES+=SwanBMI.F90
+endif
+
+BMIINCLUDES=\
+	bmi_get_nd.inc\
+	bmi_nvar.inc\
+	bmi_set_nd.inc\
+	bmi_type.inc\
+	bmi_var_name.inc\
+	bmi_module.inc\
+	bmi_rank.inc\
+	bmi_shape.inc\
+	bmi_unit.inc
+
+SwanBMI.F90: $(BMIINCLUDES)
+
+$(BMIINCLUDES): variables.json
+	python $(top_srcdir)/scripts/codegen.py
+
+libchenopis_la_DIST=variables.json
 
 # Add the library
 chenopis_LDADD=\
@@ -79,9 +102,11 @@ chenopis_SOURCES=\
 	swanmain.F
 
 
+
 hcat_SOURCES=swanhcat.F
 hcat_DIST=hcat.nml
 unhcat_SOURCES=HottifySWAN.F90
+
 clean-local:
 	rm -f *.mod
 

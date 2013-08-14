@@ -31,6 +31,11 @@ AC_FC_SRCEXT([F90])
 # Checks for typedefs, structures, and compiler characteristics.
 
 # Checks for library functions.
+
+# Check for features
+AC_ARG_WITH(bmi,[AS_HELP_STRING([--with-bmi],[Build with bmi support @<:@default=no@:>@])], [],[with_bmi=no])
+AM_CONDITIONAL([HAVE_BMI], test "x$with_bmi" != "xno")
+
 ## ----------------------- ##
 ## Libtool initialisation. ##
 ## ----------------------- ##

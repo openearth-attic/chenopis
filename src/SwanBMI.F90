@@ -48,7 +48,7 @@ contains
   end subroutine windowssucks
 
   subroutine run_model() bind(C, name="run_model")
-    use swanmain, only : swan
+    use swanapi, only : swan
     call swan()
   end subroutine run_model
 
@@ -67,7 +67,7 @@ contains
     use ocpcomm2
     use ocpcomm4
     use SwanGriddata
-    use swanmain, only : swinit, swprep,swinco, errchk,swrbc
+    use swanapi, only : swinit, swprep,swinco, errchk,swrbc
 
 
     ! The c name of the configuration file
@@ -242,7 +242,7 @@ contains
 
     use iso_c_binding, only: c_double
 
-    use swanmain
+    use swanapi
     USE TIMECOMM
     USE OCPCOMM2
     USE OCPCOMM4
