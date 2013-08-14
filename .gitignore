@@ -13,7 +13,7 @@ config.h.in
 config.log
 config.status
 config/
-
+libtool
 
 # http://www.gnu.org/software/automake
 
@@ -36,6 +36,11 @@ Makefile.in
 
 # Object files
 *.o
+
+# Libtool objects
+*.lo
+.libs
+*.la
 
 # Libraries
 *.lib
