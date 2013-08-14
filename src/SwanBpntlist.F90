@@ -438,7 +438,9 @@ subroutine SwanBpntlist
         VMMAX = MAX(VMMAX, vmark(IX))
       ENDDO
     ENDDO
-!TEST    write (prtest, *) 'test VMMAX ', VMMAX, nbpol
+#ifdef HAVE_TEST
+         write (prtest, *) 'test VMMAX ', VMMAX, nbpol
+#endif
     !
     ALLOCATE(IARR1(SUM(nbpt)))
     DO VM=1, VMMAX
@@ -476,7 +478,9 @@ subroutine SwanBpntlist
           ENDIF
         ENDDO
         IARR2 = CSHIFT(IARR2,ISH)
-!TEST        write (prtest, *) 'Shift ', ISH, MIP, IARR2(1)
+#ifdef HAVE_TEST
+             write (prtest, *) 'Shift ', ISH, MIP, IARR2(1)
+#endif
         !
         ALLOCATE(OPSTMP)
         OPSTMP%PSTYPE = 'C'

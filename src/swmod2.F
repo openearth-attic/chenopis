@@ -1057,11 +1057,15 @@
 ! 13. Source text
 !
       END MODULE M_DIFFR
-!MPI!/impi
-!MPI!/impi      MODULE MPI
-!MPI!/impi      INCLUDE 'mpif.h'
-!MPI!/impi      END MODULE MPI
-!PUN!/impi
-!PUN!/impi      MODULE MPI
-!PUN!/impi      INCLUDE 'mpif.h'
-!PUN!/impi      END MODULE MPI
+#ifdef HAVE_MPI
+    !/impi
+    !/impi      MODULE MPI
+    !/impi      INCLUDE 'mpif.h'
+    !/impi      END MODULE MPI
+#endif
+#ifdef HAVE_PUN
+    !/impi
+    !/impi      MODULE MPI
+    !/impi      INCLUDE 'mpif.h'
+    !/impi      END MODULE MPI
+#endif

@@ -539,7 +539,9 @@
      &                   ANYWND     ,SPCDIR     ,                         40.00
      &                   UX2        ,UY2        ,
      &                   SPCSIG     ,AC2                                  30.70 41.33
-!ADC     &                   ,NodeNumber                                      41.20
+#ifdef HAVE_ADC
+         &                   ,NodeNumber                                      41.20
+#endif
      &                  )
 !
 !****************************************************************
@@ -552,7 +554,9 @@
       USE SWCOMM2                                                         40.41
       USE SWCOMM3                                                         40.41
       USE SWCOMM4                                                         40.41
-!ADC      USE WIND, ONLY: WindDrag                                            41.20
+#ifdef HAVE_ADC
+          USE WIND, ONLY: WindDrag                                            41.20
+#endif
 !
       IMPLICIT NONE
 !
@@ -738,8 +742,10 @@
 !
 !***********************************************************************
 !
-!ADC      INTEGER, OPTIONAL :: NodeNumber                                     41.20
-!ADC!
+#ifdef HAVE_ADC
+          INTEGER, OPTIONAL :: NodeNumber                                     41.20
+    !
+#endif
       INTEGER      IDWMIN ,IDWMAX                                         30.70
       INTEGER      IENT   ,ID    ,IDDUM, IS
 !
@@ -978,7 +984,9 @@
            IF ( WIND10 .GT. 7.5 ) THEN
              CDRAG = ( 0.8 + 0.065 * WIND10 ) * 0.001
              CDRAG = MIN ( CDCAP, CDRAG )
-!ADC             CDRAG = WindDrag(DBLE(WIND10),NodeNumber)
+#ifdef HAVE_ADC
+                 CDRAG = WindDrag(DBLE(WIND10),NodeNumber)
+#endif
            ELSE
              CDRAG = 0.0012873
            ENDIF

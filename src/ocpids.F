@@ -13,7 +13,9 @@
       USE OCPCOMM3                                                        40.41
       USE OCPCOMM4                                                        40.41
       USE M_PARALL                                                        40.31
-!PUN      USE SIZES                                                           40.95
+#ifdef HAVE_PUN
+          USE SIZES                                                           40.95
+#endif
 
 !
 !
@@ -120,7 +122,9 @@
 !       read initialisation file
 !
         OPEN (11, FILE=INIFIL, STATUS='OLD',                              40.41
-!CVIS     &        SHARED,                                                     40.41
+#ifdef HAVE_CVIS
+          &        SHARED,                                                     40.41
+#endif
      &        ERR=950)                                                    40.41
         READ (11, *, ERR=930, END=930) INIVEF                             10.16
         IF (INIVEF.GT.INIVER .OR. INIVEF.LE.0) GOTO 935                   40.00
@@ -139,10 +143,14 @@
           READ (11, 130, ERR=930, END=930) DIRCH1
           READ (11, 130, ERR=930, END=930) DIRCH2
         ELSE
-!DOS          DIRCH1 = CHAR(47)                                               40.41 40.03
-!DOS          DIRCH2 = CHAR(92)                                               40.03
-!UNIX          DIRCH1 = CHAR(92)                                               40.41 40.30
-!UNIX          DIRCH2 = CHAR(47)                                               40.30
+#ifdef HAVE_DOS
+              DIRCH1 = CHAR(47)                                               40.41 40.03
+              DIRCH2 = CHAR(92)                                               40.03
+#endif
+#ifdef HAVE_UNIX
+               DIRCH1 = CHAR(92)                                               40.41 40.30
+               DIRCH2 = CHAR(47)                                               40.30
+#endif
         ENDIF
         IF (INIVEF.LT.3) THEN
            READ (11, 140, ERR=930, END=930) PLTOPT
@@ -198,10 +206,14 @@
         COMID  = '$'
 !       DIRCH1 is directory separation character as appears in input file
 !       DIRCH2 is directory separation character replacing DIRCH1         40.00
-!DOS        DIRCH1 =  CHAR(47)                                                40.41 40.03
-!DOS        DIRCH2 =  CHAR(92)                                                40.03
-!UNIX        DIRCH1 =  CHAR(92)                                                40.41 40.30
-!UNIX        DIRCH2 =  CHAR(47)                                                40.30
+#ifdef HAVE_DOS
+            DIRCH1 =  CHAR(47)                                                40.41 40.03
+            DIRCH2 =  CHAR(92)                                                40.03
+#endif
+#ifdef HAVE_UNIX
+             DIRCH1 =  CHAR(92)                                                40.41 40.30
+             DIRCH2 =  CHAR(47)                                                40.30
+#endif
 !       INST = name of institute, max. 40 characters
         INST = 'Delft University of Technology'
         ITMOPT = 1
@@ -230,16 +242,18 @@
          IF (STPNOW()) RETURN
       END IF
 
-!PUN      IAMMASTER = MYPROC.EQ.0                                             40.95
-!PUN      IF ( MNPROC==1 ) THEN                                               40.95
-!PUN         INPUTDIR = '.'                                                   40.95
-!PUN         LOCALDIR = '.'                                                   40.95
-!PUN      ELSE                                                                40.95
-!PUN         CALL MAKE_DIRNAME()                                              40.95
-!PUN      ENDIF                                                               40.95
-!PUN      INPFIL = TRIM(INPUTDIR)//DIRCH2//TRIM(INPFIL)                       40.95
-!PUN      OUTFIL = TRIM(LOCALDIR)//DIRCH2//TRIM(OUTFIL)                       40.95
-!PUN      TSTFIL = TRIM(LOCALDIR)//DIRCH2//TRIM(TSTFIL)                       40.95
+#ifdef HAVE_PUN
+          IAMMASTER = MYPROC.EQ.0                                             40.95
+          IF ( MNPROC==1 ) THEN                                               40.95
+             INPUTDIR = '.'                                                   40.95
+             LOCALDIR = '.'                                                   40.95
+          ELSE                                                                40.95
+             CALL MAKE_DIRNAME()                                              40.95
+          ENDIF                                                               40.95
+          INPFIL = TRIM(INPUTDIR)//DIRCH2//TRIM(INPFIL)                       40.95
+          OUTFIL = TRIM(LOCALDIR)//DIRCH2//TRIM(OUTFIL)                       40.95
+          TSTFIL = TRIM(LOCALDIR)//DIRCH2//TRIM(TSTFIL)                       40.95
+#endif
 
       IF (INIVEF.LT.INIVER) THEN
 !
@@ -302,7 +316,9 @@
       IF (LREAD) THEN
         IF (INPFIL.NE.'    ')
      &  OPEN (UNIT=INPUTF, FILE=INPFIL, STATUS='OLD',                     40.41
-!CVIS     &        SHARED,                                                     40.41
+#ifdef HAVE_CVIS
+          &        SHARED,                                                     40.41
+#endif
      &        ERR=910)                                                    40.41
         CALL RDINIT
       ENDIF

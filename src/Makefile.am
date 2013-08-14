@@ -6,15 +6,15 @@ bin_PROGRAMS=chenopis\
 chenopis_SOURCES=\
 	swmod1.F \
 	swmod2.F \
+	m_constants.F90 \
+	m_fileio.F90 \
+	serv_xnl4v5.F90 \
+	mod_xnl4v5.F90 \
 	swancom1.F \
 	swancom2.F \
 	swancom3.F \
 	swancom4.F \
 	swancom5.F \
-	m_constants.F \
-	m_fileio.F \
-	serv_xnl4v5.F90 \
-	mod_xnl4v5.F90 \
 	SwanGriddata.F90 \
 	SwanGridobjects.F90 \
 	SwanCompdata.F90 \

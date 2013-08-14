@@ -112,8 +112,12 @@ subroutine SwanCheckGrid
     !
     badvertex = .false.
     do i = 1, nverts
-!NADC       if ( vcount(i) > 0 .and. vcount(i) < 4 .and. vmark(i) == 0 ) badvertex = .true.
-!ADC       if ( vcount(i) > 0 .and. vcount(i) < 4 .and. vmark(i) == 0 ) vmark(i) = 1
+#ifdef HAVE_NADC
+            if ( vcount(i) > 0 .and. vcount(i) < 4 .and. vmark(i) == 0 ) badvertex = .true.
+#endif
+#ifdef HAVE_ADC
+           if ( vcount(i) > 0 .and. vcount(i) < 4 .and. vmark(i) == 0 ) vmark(i) = 1
+#endif
        if ( vcount(i) > 10 ) badvertex = .true.
     enddo
     !
@@ -150,7 +154,9 @@ subroutine SwanCheckGrid
        cosphi3 =( xdif13*xdif23 + ydif13*ydif23)/(sqrt(len13*len23))
        !
        if ( cosphi1 <= -0.8 .or. cosphi2 <= -0.8 .or. cosphi3 <= -0.8 ) then
-!NADC          call msgerr (2, 'an angle in a triangle is too large ')
+#ifdef HAVE_NADC
+               call msgerr (2, 'an angle in a triangle is too large ')
+#endif
        endif
        !
     enddo

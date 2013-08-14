@@ -14,8 +14,16 @@ AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE
 
 AC_PROG_FC
+
+dnl Yes, we want free form Fortran!
+AC_FC_FREEFORM
+dnl Set unlimited line length (don't create lines longer than 132, because it breaks on some compilers,
+dnl but because ifort and gfortran allow it let's not raise errors by default)
+AC_FC_LINE_LENGTH([unlimited])
+
 AC_PROG_F77
-AC_FC_SRCEXT([f90])
+AC_FC_SRCEXT([F90])
+
 # Checks for libraries.
 
 # Checks for header files.

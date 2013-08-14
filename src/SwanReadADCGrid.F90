@@ -54,12 +54,16 @@ subroutine SwanReadADCGrid
 !
 !   Modules used
 !
-!PUN    use ocpcomm2
+#ifdef HAVE_PUN
+        use ocpcomm2
+#endif
     use ocpcomm4
     use m_genarr
     use SwanGriddata
-!PUN    use SIZES
-!PUN    use MESSENGER
+#ifdef HAVE_PUN
+        use SIZES
+        use MESSENGER
+#endif
 !
     implicit none
 !
@@ -97,7 +101,9 @@ subroutine SwanReadADCGrid
     ndsd   = 0
     iostat = 0
     grdfil = 'fort.14'
-!PUN    grdfil = trim(INPUTDIR)//DIRCH2//trim(grdfil)
+#ifdef HAVE_PUN
+        grdfil = trim(INPUTDIR)//DIRCH2//trim(grdfil)
+#endif
     call for (ndsd, grdfil, 'OF', iostat)
     if (stpnow()) goto 900
     !
@@ -153,12 +159,16 @@ subroutine SwanReadADCGrid
     read(ndsd, *, end=950, err=910) nopbc
     read(ndsd, *, end=950, err=910) idum
     do j = 1, nopbc
-!PUN       if ( MNPROC==1 ) then
+#ifdef HAVE_PUN
+           if ( MNPROC==1 ) then
+#endif
           vm = j
           read(ndsd, *, end=950, err=910) n2
-!PUN       else
-!PUN          read(ndsd, *, end=950, err=910) n2, vm
-!PUN       endif
+#ifdef HAVE_PUN
+           else
+              read(ndsd, *, end=950, err=910) n2, vm
+           endif
+#endif
        do k = 1, n2
            read(ndsd, *, end=950, err=910) ivert
            vmark(ivert) = vm
@@ -168,12 +178,16 @@ subroutine SwanReadADCGrid
     read(ndsd, *, end=950, err=910) n1
     read(ndsd, *, end=950, err=910) idum
     do j = 1, n1
-!PUN       if ( MNPROC==1 ) then
+#ifdef HAVE_PUN
+           if ( MNPROC==1 ) then
+#endif
           vm = nopbc + j
           read(ndsd, *, end=950, err=910) n2, itype
-!PUN       else
-!PUN          read(ndsd, *, end=950, err=910) n2, itype, vm
-!PUN       endif
+#ifdef HAVE_PUN
+           else
+              read(ndsd, *, end=950, err=910) n2, itype, vm
+           endif
+#endif
        if ( itype /= 4 .and. itype /= 24 ) then
           do k = 1, n2
              read(ndsd, *, end=950, err=910) ivert
@@ -192,15 +206,17 @@ subroutine SwanReadADCGrid
     !
     close(ndsd)
     !
-!PUN       ! ghost vertices are marked with +999
-!PUN       !
-!PUN       do j = 1, NEIGHPROC
-!PUN          do k = 1, NNODRECV(j)
-!PUN             ivert = IRECVLOC(k,j)
-!PUN             vmark(ivert) = 999
-!PUN          enddo
-!PUN       enddo
-!PUN       !
+#ifdef HAVE_PUN
+           ! ghost vertices are marked with +999
+           !
+           do j = 1, NEIGHPROC
+              do k = 1, NNODRECV(j)
+                 ivert = IRECVLOC(k,j)
+                 vmark(ivert) = 999
+              enddo
+           enddo
+           !
+#endif
  900 return
     !
  910 call msgerr (4, 'error reading data from grid file fort.14' )

@@ -1,5 +1,9 @@
-!NADCsubroutine SwanComputeForce ( fx, fy, ac2, dep2, spcsig, spcdir )
-!ADCsubroutine SwanComputeForce
+#ifdef HAVE_NADC
+     subroutine SwanComputeForce ( fx, fy, ac2, dep2, spcsig, spcdir )
+#endif
+#ifdef HAVE_ADC
+    subroutine SwanComputeForce
+#endif
 !
 !   --|-----------------------------------------------------------|--
 !     | Delft University of Technology                            |
@@ -58,25 +62,29 @@
     use swcomm4
     use SwanGriddata
     use SwanGridobjects
-!ADC    use Couple2Adcirc, only: compda
-!ADC    use GLOBAL,        only: rsnx2, rsny2
-!ADC    use m_genarr,      only: ac2, spcdir, spcsig
+#ifdef HAVE_ADC
+        use Couple2Adcirc, only: compda
+        use GLOBAL,        only: rsnx2, rsny2
+        use m_genarr,      only: ac2, spcdir, spcsig
+#endif
 !
     implicit none
-!NADC!
-!NADC!   Argument variables
-!NADC!
-!NADC    real, dimension(MDC,MSC,nverts), intent(in) :: ac2    ! action density at current time level
-!NADC    real, dimension(nverts), intent(in)         :: dep2   ! water depth at current time level
-!NADC    real, dimension(nverts), intent(out)        :: fx     ! wave-induced force in x-direction
-!NADC    real, dimension(nverts), intent(out)        :: fy     ! wave-induced force in y-direction
-!NADC    real, dimension(MDC,6), intent(in)          :: spcdir ! (*,1): spectral direction bins (radians)
-!NADC                                                          ! (*,2): cosine of spectral directions
-!NADC                                                          ! (*,3): sine of spectral directions
-!NADC                                                          ! (*,4): cosine^2 of spectral directions
-!NADC                                                          ! (*,5): cosine*sine of spectral directions
-!NADC                                                          ! (*,6): sine^2 of spectral directions
-!NADC    real, dimension(MSC), intent(in)            :: spcsig ! relative frequency bins
+#ifdef HAVE_NADC
+     !
+     !   Argument variables
+     !
+         real, dimension(MDC,MSC,nverts), intent(in) :: ac2    ! action density at current time level
+         real, dimension(nverts), intent(in)         :: dep2   ! water depth at current time level
+         real, dimension(nverts), intent(out)        :: fx     ! wave-induced force in x-direction
+         real, dimension(nverts), intent(out)        :: fy     ! wave-induced force in y-direction
+         real, dimension(MDC,6), intent(in)          :: spcdir ! (*,1): spectral direction bins (radians)
+                                                               ! (*,2): cosine of spectral directions
+                                                               ! (*,3): sine of spectral directions
+                                                               ! (*,4): cosine^2 of spectral directions
+                                                               ! (*,5): cosine*sine of spectral directions
+                                                               ! (*,6): sine^2 of spectral directions
+         real, dimension(MSC), intent(in)            :: spcsig ! relative frequency bins
+#endif
 !
 !   Local variables
 !
@@ -119,10 +127,12 @@
     real, dimension(1)                    :: n        ! ratio of group and phase velocity
     real, dimension(1)                    :: nd       ! derivative of n with respect to depth
     real, dimension(1)                    :: sig      ! relative frequency
-!ADC    !
-!ADC    real, dimension(nverts)               :: dep2     ! help array to store water depth
-!ADC    real, dimension(nverts)               :: fx       ! help array to store wave-induced force in x-direction
-!ADC    real, dimension(nverts)               :: fy       ! help array to store wave-induced force in y-direction
+#ifdef HAVE_ADC
+        !
+        real, dimension(nverts)               :: dep2     ! help array to store water depth
+        real, dimension(nverts)               :: fx       ! help array to store wave-induced force in x-direction
+        real, dimension(nverts)               :: fy       ! help array to store wave-induced force in y-direction
+#endif
     !
     real, dimension(:), allocatable       :: sxx      ! x-component of radiation stress in x-direction
     real, dimension(:), allocatable       :: sxy      ! cross component of radiation stress in x/y-direction
@@ -155,11 +165,13 @@
     sxx = 0.
     sxy = 0.
     syy = 0.
-!ADC    !
-!ADC    ! move the depths to their own array
-!ADC    do ivert = 1, nverts
-!ADC       dep2(ivert) = compda(ivert,jdp2)
-!ADC    enddo
+#ifdef HAVE_ADC
+        !
+        ! move the depths to their own array
+        do ivert = 1, nverts
+           dep2(ivert) = compda(ivert,jdp2)
+        enddo
+#endif
     !
     ! compute radiation stresses in vertices
     !
@@ -321,12 +333,14 @@
        fy(ivert) = -RHO * GRAV * ( dsxydx  + dsyydy )
        !
     enddo vertexloop
-!ADC    !
-!ADC    ! pass stresses to ADCIRC
-!ADC    do ivert = 1, nverts
-!ADC       rsnx2(ivert) = fx(ivert)
-!ADC       rsny2(ivert) = fy(ivert)
-!ADC    enddo
+#ifdef HAVE_ADC
+        !
+        ! pass stresses to ADCIRC
+        do ivert = 1, nverts
+           rsnx2(ivert) = fx(ivert)
+           rsny2(ivert) = fy(ivert)
+        enddo
+#endif
     !
     ! deallocation of radiation stresses
     !

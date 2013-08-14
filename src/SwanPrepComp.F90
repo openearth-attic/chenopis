@@ -46,7 +46,9 @@ subroutine SwanPrepComp ( cross )
     use ocpcomm4
     use swcomm3
     use SwanGriddata
-!PUN    use SwanGridobjects
+#ifdef HAVE_PUN
+        use SwanGridobjects
+#endif
 !
     implicit none
 !
@@ -58,9 +60,13 @@ subroutine SwanPrepComp ( cross )
 !   Local variables
 !
     integer, save                         :: ient = 0 ! number of entries in this subroutine
-!PUN    integer                               :: ivert    ! loop counter over vertices
+#ifdef HAVE_PUN
+        integer                               :: ivert    ! loop counter over vertices
+#endif
     !
-!PUN    type(verttype), dimension(:), pointer :: vert     ! datastructure for vertices with their attributes
+#ifdef HAVE_PUN
+        type(verttype), dimension(:), pointer :: vert     ! datastructure for vertices with their attributes
+#endif
 !
 !   Structure
 !
@@ -70,21 +76,25 @@ subroutine SwanPrepComp ( cross )
 !
     if (ltrace) call strace (ient,'SwanPrepComp')
     !
-!PUN    ! point to vertex object
-!PUN    !
-!PUN    vert => gridobject%vert_grid
-!PUN    !
+#ifdef HAVE_PUN
+        ! point to vertex object
+        !
+        vert => gridobject%vert_grid
+        !
+#endif
     ! deallocate arrays kvertc and kvertf (we don't use them anymore!)
     !
     if (allocated(kvertc)) deallocate(kvertc)
     if (allocated(kvertf)) deallocate(kvertf)
     !
-!PUN    ! ghost vertices are regarded as vertices with boundary condition
-!PUN    !
-!PUN    do ivert = 1, nverts
-!PUN       if ( vmark(ivert) == 999 ) vert(ivert)%atti(VBC) = 1
-!PUN    enddo
-!PUN    !
+#ifdef HAVE_PUN
+        ! ghost vertices are regarded as vertices with boundary condition
+        !
+        do ivert = 1, nverts
+           if ( vmark(ivert) == 999 ) vert(ivert)%atti(VBC) = 1
+        enddo
+        !
+#endif
     ! setup a vertex list
     !
     call SwanVertlist

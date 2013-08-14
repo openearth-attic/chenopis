@@ -542,7 +542,9 @@
       USE OCPCOMM2                                                        40.41
       USE OCPCOMM3                                                        40.41
       USE OCPCOMM4                                                        40.41
-!PUN      USE SIZES, ONLY: LOCALDIR                                           40.95
+#ifdef HAVE_PUN
+          USE SIZES, ONLY: LOCALDIR                                           40.95
+#endif
 !
       IMPLICIT NONE
 !
@@ -682,7 +684,9 @@
       ELSE
         CALL INCSTR ('FNAME', FILENM, 'REQ', ' ')                         40.00
       ENDIF
-!PUN      IF (LOCAL) FILENM = TRIM(LOCALDIR)//DIRCH2//TRIM(FILENM)            40.95
+#ifdef HAVE_PUN
+          IF (LOCAL) FILENM = TRIM(LOCALDIR)//DIRCH2//TRIM(FILENM)            40.95
+#endif
 !
       IF (FILENM.NE.OLDFIL) THEN
         BNEW = .TRUE.
@@ -1258,7 +1262,9 @@
       USE OCPCOMM3                                                        40.41
       USE OCPCOMM4                                                        40.41
       USE M_PARALL                                                        40.31
-!PUN      USE SIZES                                                           40.95
+#ifdef HAVE_PUN
+          USE SIZES                                                           40.95
+#endif
 !
       IMPLICIT NONE
 !
@@ -1387,8 +1393,10 @@
   13         FORMAT('-',I3.3)                                             40.30
           END IF                                                          40.30
 !
-!PUN          ERRFNM = TRIM(LOCALDIR)//DIRCH2//TRIM(ERRFNM)                   40.95
-!PUN!
+#ifdef HAVE_PUN
+              ERRFNM = TRIM(LOCALDIR)//DIRCH2//TRIM(ERRFNM)                   40.95
+    !
+#endif
           IERRF = 17                                                      40.13
           OPEN (UNIT=IERRF, FILE=ERRFNM, FORM='FORMATTED')                40.13
         ENDIF
@@ -1859,18 +1867,22 @@
                IUNIT = IUTTM
                RETURN
             ENDIF
-!ADC  60        CONTINUE                                                      41.20
+#ifdef HAVE_ADC
+      60        CONTINUE                                                      41.20
+#endif
 !           Assign free unit number
             IF (IFUN.EQ.0) THEN
                IFUN = FUNLO
             ELSE
                IFUN = IFUN + 1
             ENDIF
-!ADC!           the following unit numbers are reserved for ADCIRC            41.20
-!ADC            IF ( IFUN.EQ.13 ) GOTO 60                                     41.20
-!ADC            IF ( IFUN.EQ.14 ) GOTO 60                                     41.20
-!ADC            IF ( IFUN.EQ.15 ) GOTO 60                                     41.20
-!ADC            IF ( IFUN.EQ.22 ) GOTO 60                                     41.20
+#ifdef HAVE_ADC
+    !           the following unit numbers are reserved for ADCIRC            41.20
+                IF ( IFUN.EQ.13 ) GOTO 60                                     41.20
+                IF ( IFUN.EQ.14 ) GOTO 60                                     41.20
+                IF ( IFUN.EQ.15 ) GOTO 60                                     41.20
+                IF ( IFUN.EQ.22 ) GOTO 60                                     41.20
+#endif
             IUNIT = IFUN
             IF (IUNIT .GT. FUNHI) THEN
                IF (IOSTAT.GT.-2) CALL MSGERR (3, 'All free units used')
@@ -1880,7 +1892,9 @@
          OPEN (UNIT=IUNIT,ERR=999,IOSTAT=IOSTTM,FILE=DDNAME,              30.82
 !/Cray     &         RECL=1000,                                                 30.82
 !/SGI     &         RECL=1000,                                                 30.82
-!CVIS     &         SHARED,                                                    40.41
+#ifdef HAVE_CVIS
+          &         SHARED,                                                    40.41
+#endif
      &         STATUS=FISTAT(IS),ACCESS='SEQUENTIAL',FORM=FORM(IFO))      30.82
       ELSE
          INQUIRE (UNIT=IUNIT, NAME=FILTTM, IOSTAT=IOSTTM,
@@ -1908,7 +1922,9 @@
               OPEN (UNIT=IUNIT,ERR=999,IOSTAT=IOSTTM,STATUS=FISTAT(IS),
 !/Cray     &         RECL=1000,                                                 30.82
 !/SGI     &         RECL=1000,                                                 30.82
-!CVIS     &         SHARED,                                                    40.41
+#ifdef HAVE_CVIS
+          &         SHARED,                                                    40.41
+#endif
      &              FILE=DDNAME,ACCESS='SEQUENTIAL',FORM=FORM(IFO))
               IF (IOSTTM.NE.IESUCC) IOSTAT = IOSTTM
               GOTO 80
@@ -1920,13 +1936,17 @@
             OPEN (UNIT=IUNIT,ERR=999,IOSTAT=IOSTTM,STATUS=FISTAT(IS),
 !/Cray     &         RECL=1000,                                                 30.82
 !/SGI     &         RECL=1000,                                                 30.82
-!CVIS     &         SHARED,                                                    40.41
+#ifdef HAVE_CVIS
+          &         SHARED,                                                    40.41
+#endif
      &      FILE=DDNAME,ACCESS='SEQUENTIAL',FORM=FORM(IFO))
          ELSE
             OPEN (UNIT=IUNIT,ERR=999,IOSTAT=IOSTTM,STATUS=FISTAT(IS),
 !/Cray     &         RECL=1000,                                                 30.82
 !/SGI     &         RECL=1000,                                                 30.82
-!CVIS     &         SHARED,                                                    40.41
+#ifdef HAVE_CVIS
+          &         SHARED,                                                    40.41
+#endif
      &      ACCESS='SEQUENTIAL',FORM=FORM(IFO))
          END IF
       END IF

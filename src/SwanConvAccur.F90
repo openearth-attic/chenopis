@@ -158,12 +158,14 @@ subroutine SwanConvAccur ( accur, hscurr, tmcurr, delhs, deltm, xytst, spcsig, a
     !$omp atomic
     tmmean = tmmean + tmmeant
     !
-!PUN    ! perform global reductions in parallel run
-!PUN    !
-!PUN    call SwanSumOverNodes ( nwetp  )
-!PUN    call SwanSumOverNodes ( hsmean )
-!PUN    call SwanSumOverNodes ( tmmean )
-!PUN    !
+#ifdef HAVE_PUN
+        ! perform global reductions in parallel run
+        !
+        call SwanSumOverNodes ( nwetp  )
+        call SwanSumOverNodes ( hsmean )
+        call SwanSumOverNodes ( tmmean )
+        !
+#endif
     !$omp barrier
     !$omp single
     hsmean = hsmean/nwetp
@@ -256,10 +258,12 @@ subroutine SwanConvAccur ( accur, hscurr, tmcurr, delhs, deltm, xytst, spcsig, a
     !$omp atomic
     npacc = npacc + npacct
     !
-!PUN    ! perform global reduction in parallel run
-!PUN    !
-!PUN    call SwanSumOverNodes ( npacc )
-!PUN    !
+#ifdef HAVE_PUN
+        ! perform global reduction in parallel run
+        !
+        call SwanSumOverNodes ( npacc )
+        !
+#endif
     ! compute percentage of active vertices where required accuracy has been reached
     !
     !$omp barrier

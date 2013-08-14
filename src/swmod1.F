@@ -2010,7 +2010,9 @@
 !                 =1; for command GEN1 ...,
 !                 =2; for command GEN2 ...,
 !                 =3; for command GEN3 ...,
-!CTGA 111003:  Full ice implementation.  Parameter read in swanpre1.ftn
+#ifdef HAVE_CTGA
+      111003:  Full ice implementation.  Parameter read in swanpre1.ftn
+#endif
 ! IICE   [      ] indicates how ice is to be handled within the model
 !                 =1; for undefined command
 !                 =2; for command CICE ADCICE ...
@@ -2381,7 +2383,9 @@
 !                 =gamma; set by command BOU STAT ... JON [gamma]
 ! U10    [    0.] wind velocity
 !                 =vel; set by command WIND [vel] ...
-!CTGA 111003:  Full ice implementation.  Parameter read in swanpre1.ftn
+#ifdef HAVE_CTGA
+      111003:  Full ice implementation.  Parameter read in swanpre1.ftn
+#endif
 ! WBICETH[  70.0] Minimum ice concentration (percentage out of 100.0)
 !                 necessary to trigger wave blocking.
 ! WDIC   [CALCUL] =PI2*((WDIP/PI2-NINT(WDIP/PI2)),
@@ -2400,7 +2404,9 @@
       INTEGER             IDIFFR                                          40.21
       INTEGER             IVEG                                            40.55
       INTEGER             IFRSRF                                          41.06
-!CTGA 111003:  Full ice implementation.  Parameter read in swanpre1.ftn
+#ifdef HAVE_CTGA
+      111003:  Full ice implementation.  Parameter read in swanpre1.ftn
+#endif
       INTEGER             IICE
       REAL                DEPMIN,      PBOT(MBOT),  PNUMS(MNUMS)
       REAL                PSETUP(MSETUP),           PSHAPE(MSHAPE)
@@ -2412,7 +2418,9 @@
       REAL                PQUAD(MQUAD)
       REAL                RCOMPT(50,5)
       REAL                PDIFFR(MDIFFR)                                  40.21
-!CTGA 111003:  Full ice implementation.  Parameter read in swanpre1.ftn
+#ifdef HAVE_CTGA
+      111003:  Full ice implementation.  Parameter read in swanpre1.ftn
+#endif
       REAL                WBICETH
       LOGICAL             ACUPDA
       LOGICAL             BNDCHK,      BNAUT,       ONED,        BRESCL
@@ -2660,13 +2668,15 @@
 !     ---
 !
 !  6. Parameter variables
-!TIMG!
-!TIMG!     MXTIMR [  10] maximum number of simultaneous timings, dimension of
-!TIMG!                   work-arrays LISTTM, TIMERS
-!TIMG!     NSECTM [ 300] number of sections that may be defined for an application
-!TIMG!
-!TIMG      INTEGER NSECTM, MXTIMR
-!TIMG      PARAMETER (NSECTM=300, MXTIMR=10)
+#ifdef HAVE_TIMG
+     !
+     !     MXTIMR [  10] maximum number of simultaneous timings, dimension of
+     !                   work-arrays LISTTM, TIMERS
+     !     NSECTM [ 300] number of sections that may be defined for an application
+     !
+           INTEGER NSECTM, MXTIMR
+           PARAMETER (NSECTM=300, MXTIMR=10)
+#endif
 !
 !  7. Local variables
 !
@@ -2704,23 +2714,25 @@
 !
       INTEGER  IFACMX, IFACMY
       REAL     BEGBOU, TIMERB, TINTBO
-!TIMG!
-!TIMG!     *** contains the cpu and wall-clock times ***
-!TIMG!
-!TIMG! DCUMTM    [ 600] cumulative time; columns 1,2: cpu-time, wall-clock time
-!TIMG! LASTTM    [   1] last occupied position in LISTTM, 0 if all positions in
-!TIMG!                  LISTTM are free
-!TIMG! LISTTM    [  10] list of section numbers for all running/active timers
-!TIMG!                  in array TIMERS. A value of -1 signals that the
-!TIMG!                  corresponding timer is not running
-!TIMG! NCUMTM    [ 300] for each section of the application the number of timings
-!TIMG!                  that contributed to time in DCPUTM
-!TIMG! TIMERS    [ 600] start-time of active timers; columns 1,2: cpu-time,
-!TIMG!                  wall-clock time
-!TIMG!
-!TIMG      INTEGER, SAVE          :: NCUMTM(NSECTM), LISTTM(MXTIMR), LASTTM
-!TIMG      DOUBLE PRECISION, SAVE :: DCUMTM(NSECTM,2), TIMERS(MXTIMR,2)
-!TIMG!$OMP THREADPRIVATE(DCUMTM,TIMERS,NCUMTM,LISTTM,LASTTM)
+#ifdef HAVE_TIMG
+     !
+     !     *** contains the cpu and wall-clock times ***
+     !
+     ! DCUMTM    [ 600] cumulative time; columns 1,2: cpu-time, wall-clock time
+     ! LASTTM    [   1] last occupied position in LISTTM, 0 if all positions in
+     !                  LISTTM are free
+     ! LISTTM    [  10] list of section numbers for all running/active timers
+     !                  in array TIMERS. A value of -1 signals that the
+     !                  corresponding timer is not running
+     ! NCUMTM    [ 300] for each section of the application the number of timings
+     !                  that contributed to time in DCPUTM
+     ! TIMERS    [ 600] start-time of active timers; columns 1,2: cpu-time,
+     !                  wall-clock time
+     !
+           INTEGER, SAVE          :: NCUMTM(NSECTM), LISTTM(MXTIMR), LASTTM
+           DOUBLE PRECISION, SAVE :: DCUMTM(NSECTM,2), TIMERS(MXTIMR,2)
+     !$OMP THREADPRIVATE(DCUMTM,TIMERS,NCUMTM,LISTTM,LASTTM)
+#endif
 !
 !  8. Subroutines and functions used
 !

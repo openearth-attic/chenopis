@@ -44,10 +44,12 @@ subroutine SwanSumOverNodes ( rval )
 !   Modules used
 !
     use ocpcomm4
-!PUN    use SIZES, only: MNPROC
-!PUN    use GLOBAL, only: COMM
-!PUN    use MESSENGER, only: IERR
-!PUN    use mpi
+#ifdef HAVE_PUN
+        use SIZES, only: MNPROC
+        use GLOBAL, only: COMM
+        use MESSENGER, only: IERR
+        use mpi
+#endif
 !
     implicit none
 !
@@ -71,14 +73,22 @@ subroutine SwanSumOverNodes ( rval )
     !
     ! if not parallel, return
     !
-!PUN    if ( MNPROC==1 ) return
+#ifdef HAVE_PUN
+        if ( MNPROC==1 ) return
+#endif
     !
-!TIMG    call SWTSTA(202)
+#ifdef HAVE_TIMG
+         call SWTSTA(202)
+#endif
     sumval = 0.
     count  = 1
-!PUN    call MPI_ALLREDUCE ( rval, sumval, count, MPI_REAL4, MPI_SUM, COMM, IERR )
+#ifdef HAVE_PUN
+        call MPI_ALLREDUCE ( rval, sumval, count, MPI_REAL4, MPI_SUM, COMM, IERR )
+#endif
     !
     rval = sumval
-!TIMG    call SWTSTO(202)
+#ifdef HAVE_TIMG
+         call SWTSTO(202)
+#endif
     !
 end subroutine SwanSumOverNodes

@@ -103,21 +103,23 @@ subroutine SwanInitCompGrid ( logcom )
        if (ycugrd(i) > YCGMAX) YCGMAX = ycugrd(i)
     enddo
     !
-!PUN    XCGMIN = XCGMIN + XOFFS
-!PUN    YCGMIN = YCGMIN + YOFFS
-!PUN    XCGMAX = XCGMAX + XOFFS
-!PUN    YCGMAX = YCGMAX + YOFFS
-!PUN    !
-!PUN    call SwanMinOverNodes ( XCGMIN )
-!PUN    call SwanMinOverNodes ( YCGMIN )
-!PUN    call SwanMaxOverNodes ( XCGMAX )
-!PUN    call SwanMaxOverNodes ( YCGMAX )
-!PUN    !
-!PUN    XCGMIN = XCGMIN - XOFFS
-!PUN    YCGMIN = YCGMIN - YOFFS
-!PUN    XCGMAX = XCGMAX - XOFFS
-!PUN    YCGMAX = YCGMAX - YOFFS
-!PUN    !
+#ifdef HAVE_PUN
+        XCGMIN = XCGMIN + XOFFS
+        YCGMIN = YCGMIN + YOFFS
+        XCGMAX = XCGMAX + XOFFS
+        YCGMAX = YCGMAX + YOFFS
+        !
+        call SwanMinOverNodes ( XCGMIN )
+        call SwanMinOverNodes ( YCGMIN )
+        call SwanMaxOverNodes ( XCGMAX )
+        call SwanMaxOverNodes ( YCGMAX )
+        !
+        XCGMIN = XCGMIN - XOFFS
+        YCGMIN = YCGMIN - YOFFS
+        XCGMAX = XCGMAX - XOFFS
+        YCGMAX = YCGMAX - YOFFS
+        !
+#endif
     XCLEN = XCGMAX - XCGMIN
     YCLEN = YCGMAX - YCGMIN
     !

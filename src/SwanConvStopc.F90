@@ -244,11 +244,13 @@ subroutine SwanConvStopc ( accur, hscurr, hsprev, hsdifc, tmcurr, tmprev, tmdifc
     !$omp atomic
     nwetp = nwetp + nwetpt
     !
-!PUN    ! perform global reduction in parallel run
-!PUN    !
-!PUN    call SwanSumOverNodes ( nwetp )
-!PUN    call SwanSumOverNodes ( npacc )
-!PUN    !
+#ifdef HAVE_PUN
+        ! perform global reduction in parallel run
+        !
+        call SwanSumOverNodes ( nwetp )
+        call SwanSumOverNodes ( npacc )
+        !
+#endif
     ! compute percentage of active vertices where required accuracy has been reached
     !
     !$omp barrier

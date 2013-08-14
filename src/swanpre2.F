@@ -1028,7 +1028,9 @@
       USE SWCOMM4                                                         40.41
       USE OUTP_DATA                                                       40.13
       USE M_PARALL                                                        40.31
-!PUN      USE SIZES                                                           40.95
+#ifdef HAVE_PUN
+          USE SIZES                                                           40.95
+#endif
 !
 !
 !   --|-----------------------------------------------------------|--
@@ -1214,7 +1216,9 @@
                WRITE(FILENM(ILPOS+1:ILPOS+4),33) INODE                    40.30
   33           FORMAT('-',I3.3)                                           40.30
             END IF                                                        40.30
-!PUN            FILENM = TRIM(LOCALDIR)//DIRCH2//TRIM(FILENM)                 40.95
+#ifdef HAVE_PUN
+                FILENM = TRIM(LOCALDIR)//DIRCH2//TRIM(FILENM)                 40.95
+#endif
           ENDIF
           CALL INKEYW ('STA', ' ')
           IF (KEYWIS('LAY')) THEN
@@ -1420,7 +1424,9 @@
              ILPOS = INDEX ( FILENM, ' ' )-1                              40.30
              WRITE(FILENM(ILPOS+1:ILPOS+4),33) INODE                      40.30
           END IF                                                          40.30
-!PUN          FILENM = TRIM(LOCALDIR)//DIRCH2//TRIM(FILENM)                   40.95
+#ifdef HAVE_PUN
+              FILENM = TRIM(LOCALDIR)//DIRCH2//TRIM(FILENM)                   40.95
+#endif
         ELSE
           NREF = PRINTF
         ENDIF
@@ -1617,7 +1623,9 @@
            ILPOS = INDEX ( FILENM, ' ' )-1                                40.30
            WRITE(FILENM(ILPOS+1:ILPOS+4),33) INODE                        40.30
         END IF                                                            40.30
-!PUN        FILENM = TRIM(LOCALDIR)//DIRCH2//TRIM(FILENM)                     40.95
+#ifdef HAVE_PUN
+            FILENM = TRIM(LOCALDIR)//DIRCH2//TRIM(FILENM)                     40.95
+#endif
         ORQTMP%PSNAME = PSNAME                                            40.31
         ORQTMP%OQI(1) = NREF                                              40.31
         ORQTMP%OQI(2) = NREOQ                                             40.31
@@ -1697,7 +1705,9 @@
              ILPOS = INDEX ( FILENM, ' ' )-1                              40.30
              WRITE(FILENM(ILPOS+1:ILPOS+4),33) INODE                      40.30
           END IF                                                          40.30
-!PUN          FILENM = TRIM(LOCALDIR)//DIRCH2//TRIM(FILENM)                   40.95
+#ifdef HAVE_PUN
+              FILENM = TRIM(LOCALDIR)//DIRCH2//TRIM(FILENM)                   40.95
+#endif
           ORQTMP%PSNAME = PSNAME                                          40.31
           ORQTMP%OQI(1) = NREF                                            40.31
           ORQTMP%OQI(2) = NREOQ                                           40.31
@@ -5436,7 +5446,9 @@
       USE OUTP_DATA                                                       40.31
       USE M_PARALL                                                        40.31
       USE SwanGriddata                                                    40.80
-!PUN      USE SIZES                                                           40.95
+#ifdef HAVE_PUN
+          USE SIZES                                                           40.95
+#endif
 !
 !
 !   --|-----------------------------------------------------------|--
@@ -5704,7 +5716,9 @@
            WRITE(FILENM(ILPOS+1:ILPOS+4),99) INODE                        40.30
   99       FORMAT('-',I3.3)                                               40.30
         END IF                                                            40.30
-!PUN        FILENM = TRIM(LOCALDIR)//DIRCH2//TRIM(FILENM)                     40.95
+#ifdef HAVE_PUN
+            FILENM = TRIM(LOCALDIR)//DIRCH2//TRIM(FILENM)                     40.95
+#endif
         IERR = 0                                                          40.00
         CALL FOR (IFPAR, FILENM, 'UF', IERR)                              40.00
         IF (STPNOW()) RETURN                                              34.01
@@ -5788,7 +5802,9 @@
            ILPOS = INDEX ( FILENM, ' ' )-1                                40.30
            WRITE(FILENM(ILPOS+1:ILPOS+4),99) INODE                        40.30
         END IF                                                            40.30
-!PUN        FILENM = TRIM(LOCALDIR)//DIRCH2//TRIM(FILENM)                     40.95
+#ifdef HAVE_PUN
+            FILENM = TRIM(LOCALDIR)//DIRCH2//TRIM(FILENM)                     40.95
+#endif
         IERR = 0                                                          40.00
         CALL FOR (IFS1D, FILENM, 'UF', IERR)                              40.00
         IF (STPNOW()) RETURN                                              34.01
@@ -5868,7 +5884,9 @@
            ILPOS = INDEX ( FILENM, ' ' )-1                                40.30
            WRITE(FILENM(ILPOS+1:ILPOS+4),99) INODE                        40.30
         END IF                                                            40.30
-!PUN        FILENM = TRIM(LOCALDIR)//DIRCH2//TRIM(FILENM)                     40.95
+#ifdef HAVE_PUN
+            FILENM = TRIM(LOCALDIR)//DIRCH2//TRIM(FILENM)                     40.95
+#endif
         IERR = 0                                                          40.00
         CALL FOR (IFS2D, FILENM, 'UF', IERR)                              40.00
         IF (STPNOW()) RETURN                                              34.01

@@ -33,7 +33,9 @@
       USE OUTP_DATA                                                       40.31
       USE M_PARALL                                                        40.31
       USE SwanGriddata                                                    40.80
-!PUN      USE SIZES, ONLY: MNPROC
+#ifdef HAVE_PUN
+          USE SIZES, ONLY: MNPROC
+#endif
 !
 !
 !
@@ -356,9 +358,13 @@
         CALL SWOEXD (OQPROC, MIP, VOQ(1+2*MIP),                           40.31 30.90
      &               VOQ(1+3*MIP), VOQR, VOQ(1),                          40.31 30.90
      &               COMPDA, KGRPNT, FORCE, CROSS, IONOD                  40.86 40.80 40.31
-!PUN     &               ,IRQ                                                 41.36
+#ifdef HAVE_PUN
+         &               ,IRQ                                                 41.36
+#endif
      &              )
-!PUN        IF (STPNOW()) RETURN
+#ifdef HAVE_PUN
+            IF (STPNOW()) RETURN
+#endif
 !
         DEALLOCATE(FORCE)                                                 40.80
 !
@@ -410,8 +416,12 @@
 !
 !       ***** block output *****
         IF (RTYPE(1:3) .EQ. 'BLK') THEN
-!NPUN          IF (PARLL) THEN                                                 40.31
-!PUN          IF (MNPROC>1) THEN                                              41.36
+#ifdef HAVE_PUN
+           IF (MNPROC>1) THEN                                              41.36
+#else
+               IF (PARLL) THEN                                                 40.31
+#endif
+
              CALL SWBLKP ( CORQ%OQI, CORQ%IVTYP, MXK, MYK, VOQR,          40.31
      &                     VOQ(1), IONOD )                                40.51 40.31
           ELSE                                                            40.31
@@ -1356,12 +1366,16 @@
 !                                                                      *
       SUBROUTINE SWOEXD (OQPROC, MIP, XC, YC, VOQR, VOQ, COMPDA ,KGRPNT,  30.21
      &                   FORCE, CROSS, IONOD                              40.86 40.80 40.31
-!PUN     &                   ,IRQ                                             41.36
+#ifdef HAVE_PUN
+         &                   ,IRQ                                             41.36
+#endif
      &                  )
 !                                                                      *
 !***********************************************************************
 !
-!PUN      USE OCPCOMM2
+#ifdef HAVE_PUN
+          USE OCPCOMM2
+#endif
       USE OCPCOMM4                                                        40.41
       USE SWCOMM1                                                         40.41
       USE SWCOMM2                                                         40.41
@@ -1373,7 +1387,9 @@
       USE OUTP_DATA
       USE SwanGriddata                                                    40.80
       USE SwanGridobjects                                                 40.91
-!PUN      USE SIZES
+#ifdef HAVE_PUN
+          USE SIZES
+#endif
 !
 !
 !
@@ -1481,12 +1497,16 @@
       REAL       FORCE(nverts,2)                                          40.80
       INTEGER    VOQR(*), KGRPNT(MXC,MYC)
       INTEGER    IONOD(*)                                                 40.31
-!PUN      INTEGER    IRQ                                                      41.36
-!PUN      INTEGER    IVERTP, NOWNV
-!PUN      INTEGER    NREF, IOSTAT
+#ifdef HAVE_PUN
+          INTEGER    IRQ                                                      41.36
+          INTEGER    IVERTP, NOWNV
+          INTEGER    NREF, IOSTAT
+#endif
       INTEGER, ALLOCATABLE :: KVERT(:)                                    41.07
       LOGICAL    OQPROC(*), EQREAL                                        30.72
-!PUN      LOGICAL    STPNOW
+#ifdef HAVE_PUN
+          LOGICAL    STPNOW
+#endif
       LOGICAL    CROSS(4,MIP)                                             40.86
       LOGICAL, ALLOCATABLE :: LTMP(:)                                     40.91
       type(verttype), dimension(:), pointer :: vert                       40.91
@@ -2477,33 +2497,37 @@
      &           IY.GE.IYB .AND. IY.LE.IYE ) IONOD(IP) = INODE            40.31
          END DO                                                           40.31
       END IF                                                              40.31
-!ADC!
-!ADC      IF (IRQ.EQ.-999) GOTO 900
-!PUN!
-!PUN      IF (MNPROC.EQ.1) GOTO 900
-!PUN!
-!PUN      NOWNV = 0
-!PUN      DO IP = 1, MIP
-!PUN         IVERTP = ivertg(KVERT(IP))
-!PUN         IF ( KVERT(IP).GT.0 .AND. IVERTP.GT.0 ) THEN
-!PUN            NOWNV = NOWNV + 1
-!PUN            IONOD(IP) = MYPROC
-!PUN         ENDIF
-!PUN      ENDDO
-!PUN!
-!PUN      IF (.NOT.LCOMPGRD) THEN
-!PUN         NREF   =  0
-!PUN         IOSTAT = -1
-!PUN         FILENM = TRIM(LOCALDIR)//DIRCH2//'output.set'
-!PUN         CALL FOR (NREF, FILENM, 'UF', IOSTAT)
-!PUN         IF (STPNOW()) RETURN
-!PUN         WRITE(NREF,'(2I8)') IRQ, NOWNV
-!PUN         DO IP = 1, MIP
-!PUN            IVERTP = ivertg(KVERT(IP))
-!PUN            IF ( IONOD(IP).EQ.MYPROC ) WRITE(NREF,'(2I8)') IP, IVERTP
-!PUN         ENDDO
-!PUN         IF (IRQ.EQ.NREOQ) CLOSE(NREF)
-!PUN      ENDIF
+#ifdef HAVE_ADC
+    !
+          IF (IRQ.EQ.-999) GOTO 900
+#endif
+#ifdef HAVE_PUN
+    !
+          IF (MNPROC.EQ.1) GOTO 900
+    !
+          NOWNV = 0
+          DO IP = 1, MIP
+             IVERTP = ivertg(KVERT(IP))
+             IF ( KVERT(IP).GT.0 .AND. IVERTP.GT.0 ) THEN
+                NOWNV = NOWNV + 1
+                IONOD(IP) = MYPROC
+             ENDIF
+          ENDDO
+    !
+          IF (.NOT.LCOMPGRD) THEN
+             NREF   =  0
+             IOSTAT = -1
+             FILENM = TRIM(LOCALDIR)//DIRCH2//'output.set'
+             CALL FOR (NREF, FILENM, 'UF', IOSTAT)
+             IF (STPNOW()) RETURN
+             WRITE(NREF,'(2I8)') IRQ, NOWNV
+             DO IP = 1, MIP
+                IVERTP = ivertg(KVERT(IP))
+                IF ( IONOD(IP).EQ.MYPROC ) WRITE(NREF,'(2I8)') IP, IVERTP
+             ENDDO
+             IF (IRQ.EQ.NREOQ) CLOSE(NREF)
+          ENDIF
+#endif
 !
  900  IF (ALLOCATED(KVERT)) DEALLOCATE(KVERT)                             41.07
 !
@@ -4731,8 +4755,10 @@
 !                      terminated or not
 !     STRACE           Tracing routine for debugging
 !     SWEXCHG          exchanges AC2 at subdomain boundaries
-!TIMG!     SWTSTA           Start timing for a section of code
-!TIMG!     SWTSTO           Stop timing for a section of code
+#ifdef HAVE_TIMG
+     !     SWTSTA           Start timing for a section of code
+     !     SWTSTO           Stop timing for a section of code
+#endif
 !
       LOGICAL STPNOW
 !
@@ -4793,7 +4819,9 @@
 !         within distributed-memory environment                           40.31
 !
       IF (PARLL) THEN                                                     40.41
-!TIMG         CALL SWTSTA(213)                                                 40.31
+#ifdef HAVE_TIMG
+              CALL SWTSTA(213)                                                 40.31
+#endif
          DO ID = 1, MDC                                                   40.31
             DO IS = 1, MSC                                                40.31
                AC2LOC(:) = AC2(ID,IS,:)                                   40.31
@@ -4801,7 +4829,9 @@
                AC2(ID,IS,:) = AC2LOC(:)                                   40.31
             END DO                                                        40.31
          END DO                                                           40.31
-!TIMG         CALL SWTSTO(213)                                                 40.31
+#ifdef HAVE_TIMG
+              CALL SWTSTO(213)                                                 40.31
+#endif
          IF (STPNOW()) RETURN                                             40.31
       END IF
 !

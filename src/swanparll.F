@@ -32,7 +32,9 @@
 !
 !****************************************************************
 !
-!MPI      USE MPI
+#ifdef HAVE_MPI
+          USE MPI
+#endif
       USE OCPCOMM4                                                        40.41
       USE M_PARALL                                                        40.31
 !
@@ -111,9 +113,11 @@
 !  8. Subroutines used
 !
 !     INTSTR           Converts integer to string
-!MPI!     MPI_COMM_RANK    Get rank of processes in MPI communication context
-!MPI!     MPI_COMM_SIZE    Get number of processes in MPI communication context
-!MPI!     MPI_INIT         Enroll in MPI
+#ifdef HAVE_MPI
+    !     MPI_COMM_RANK    Get rank of processes in MPI communication context
+    !     MPI_COMM_SIZE    Get number of processes in MPI communication context
+    !     MPI_INIT         Enroll in MPI
+#endif
 !     MSGERR           Writes error message
 !     TXPBLA           Removes leading and trailing blanks in string
 !
@@ -135,53 +139,59 @@
       MAXERR = 1
       ITRACE = 0
 
-!MPI!     --- enroll in MPI
-!MPI
-!MPI      CALL MPI_INIT ( IERR )
-!MPI      IF ( IERR.NE.MPI_SUCCESS ) THEN
-!MPI         CHARS(1) = INTSTR(IERR)
-!MPI         CALL TXPBLA(CHARS(1),IF1,IL1)
-!MPI         MSGSTR = 'MPI produces some internal error - '//
-!MPI     &            'return code is '//CHARS(1)(IF1:IL1)
-!MPI         CALL MSGERR ( 4, MSGSTR )
-!MPI         RETURN
-!MPI      END IF
+#ifdef HAVE_MPI
+    !     --- enroll in MPI
+
+          CALL MPI_INIT ( IERR )
+          IF ( IERR.NE.MPI_SUCCESS ) THEN
+             CHARS(1) = INTSTR(IERR)
+             CALL TXPBLA(CHARS(1),IF1,IL1)
+             MSGSTR = 'MPI produces some internal error - '//
+         &            'return code is '//CHARS(1)(IF1:IL1)
+             CALL MSGERR ( 4, MSGSTR )
+             RETURN
+          END IF
+#endif
 
 !     --- initialize common variables
 
       INODE = 0
       NPROC = 1
 
-!MPI!     --- get node number INODE
-!MPI
-!MPI      CALL MPI_COMM_RANK ( MPI_COMM_WORLD, INODE, IERR )
+#ifdef HAVE_MPI
+    !     --- get node number INODE
+
+          CALL MPI_COMM_RANK ( MPI_COMM_WORLD, INODE, IERR )
+#endif
       INODE = INODE + 1
-!MPI      IF ( IERR.NE.MPI_SUCCESS ) THEN
-!MPI         CHARS(1) = INTSTR(IERR)
-!MPI         CALL TXPBLA(CHARS(1),IF1,IL1)
-!MPI         CHARS(2) = INTSTR(INODE)
-!MPI         CALL TXPBLA(CHARS(2),IF2,IL2)
-!MPI         MSGSTR = 'MPI produces some internal error - '//
-!MPI     &            'return code is '//CHARS(1)(IF1:IL1)//
-!MPI     &            ' and node number is '//CHARS(2)(IF2:IL2)
-!MPI         CALL MSGERR ( 4, MSGSTR )
-!MPI         RETURN
-!MPI      END IF
-!MPI
-!MPI!     --- determine total number of processes
-!MPI
-!MPI      CALL MPI_COMM_SIZE ( MPI_COMM_WORLD, NPROC, IERR )
-!MPI      IF ( IERR.NE.MPI_SUCCESS ) THEN
-!MPI         CHARS(1) = INTSTR(IERR)
-!MPI         CALL TXPBLA(CHARS(1),IF1,IL1)
-!MPI         CHARS(2) = INTSTR(INODE)
-!MPI         CALL TXPBLA(CHARS(2),IF2,IL2)
-!MPI         MSGSTR = 'MPI produces some internal error - '//
-!MPI     &            'return code is '//CHARS(1)(IF1:IL1)//
-!MPI     &            ' and node number is '//CHARS(2)(IF2:IL2)
-!MPI         CALL MSGERR ( 4, MSGSTR )
-!MPI         RETURN
-!MPI      END IF
+#ifdef HAVE_MPI
+          IF ( IERR.NE.MPI_SUCCESS ) THEN
+             CHARS(1) = INTSTR(IERR)
+             CALL TXPBLA(CHARS(1),IF1,IL1)
+             CHARS(2) = INTSTR(INODE)
+             CALL TXPBLA(CHARS(2),IF2,IL2)
+             MSGSTR = 'MPI produces some internal error - '//
+         &            'return code is '//CHARS(1)(IF1:IL1)//
+         &            ' and node number is '//CHARS(2)(IF2:IL2)
+             CALL MSGERR ( 4, MSGSTR )
+             RETURN
+          END IF
+
+    !     --- determine total number of processes
+
+          CALL MPI_COMM_SIZE ( MPI_COMM_WORLD, NPROC, IERR )
+          IF ( IERR.NE.MPI_SUCCESS ) THEN
+             CHARS(1) = INTSTR(IERR)
+             CALL TXPBLA(CHARS(1),IF1,IL1)
+             CHARS(2) = INTSTR(INODE)
+             CALL TXPBLA(CHARS(2),IF2,IL2)
+             MSGSTR = 'MPI produces some internal error - '//
+         &            'return code is '//CHARS(1)(IF1:IL1)//
+         &            ' and node number is '//CHARS(2)(IF2:IL2)
+             CALL MSGERR ( 4, MSGSTR )
+             RETURN
+          END IF
+#endif
 
 !     --- determine whether this is a parallel run or not
 
@@ -195,13 +205,15 @@
 
       IAMMASTER = INODE.EQ.MASTER
 
-!MPI!     --- define MPI constants for communication within SWAN
-!MPI
-!MPI      SWINT  = MPI_INTEGER
-!MPI      SWREAL = MPI_REAL
-!MPI      SWMAX  = MPI_MAX
-!MPI      SWMIN  = MPI_MIN
-!MPI      SWSUM  = MPI_SUM
+#ifdef HAVE_MPI
+    !     --- define MPI constants for communication within SWAN
+
+          SWINT  = MPI_INTEGER
+          SWREAL = MPI_REAL
+          SWMAX  = MPI_MAX
+          SWMIN  = MPI_MIN
+          SWSUM  = MPI_SUM
+#endif
 
       RETURN
       END
@@ -211,7 +223,9 @@
 !
 !****************************************************************
 !
-!MPI      USE MPI
+#ifdef HAVE_MPI
+          USE MPI
+#endif
       USE OCPCOMM4                                                        40.41
 !
       IMPLICIT NONE
@@ -278,10 +292,12 @@
 !
 !  8. Subroutines used
 !
-!MPI!     MPI_ABORT        Abort MPI if severe error occurs
-!MPI!     MPI_BARRIER      Blocks until all nodes have called this routine
-!MPI!     MPI_INITIALIZED  Indicates whether MPI_Init has been called
-!MPI!     MPI_FINALIZE     Cleans up the MPI state and exits
+#ifdef HAVE_MPI
+    !     MPI_ABORT        Abort MPI if severe error occurs
+    !     MPI_BARRIER      Blocks until all nodes have called this routine
+    !     MPI_INITIALIZED  Indicates whether MPI_Init has been called
+    !     MPI_FINALIZE     Cleans up the MPI state and exits
+#endif
 !
 !  9. Subroutines calling
 !
@@ -293,36 +309,40 @@
 !
 ! 12. Structure
 !
-!MPI!     if MPI has been initialized
-!MPI!        synchronize nodes
-!MPI!        if severe error
-!MPI!           abort MPI
-!MPI!        else
-!MPI!           close MPI
-!MPI!
+#ifdef HAVE_MPI
+    !     if MPI has been initialized
+    !        synchronize nodes
+    !        if severe error
+    !           abort MPI
+    !        else
+    !           close MPI
+    !
+#endif
 ! 13. Source text
 !
-!MPI      CALL MPI_INITIALIZED ( PARALMPI, IERR )
-!MPI      IF ( PARALMPI ) THEN
-!MPI
-!MPI         CALL MPI_BARRIER ( MPI_COMM_WORLD, IERR )
-!MPI
-!MPI         IF ( LEVERR.GE.4 ) THEN
-!MPI
-!MPI!        --- in case of a severe error abort all MPI processes
-!MPI
-!MPI            CALL MPI_ABORT ( MPI_COMM_WORLD, LEVERR, IERR )
-!MPI
-!MPI         ELSE
-!MPI
-!MPI!        --- otherwise stop MPI operations on this computer
-!MPI
-!MPI            CALL MPI_FINALIZE ( IERR )
-!MPI
-!MPI         END IF
-!MPI
-!MPI      END IF
-!MPI
+#ifdef HAVE_MPI
+          CALL MPI_INITIALIZED ( PARALMPI, IERR )
+          IF ( PARALMPI ) THEN
+
+             CALL MPI_BARRIER ( MPI_COMM_WORLD, IERR )
+
+             IF ( LEVERR.GE.4 ) THEN
+
+    !        --- in case of a severe error abort all MPI processes
+
+                CALL MPI_ABORT ( MPI_COMM_WORLD, LEVERR, IERR )
+
+             ELSE
+
+    !        --- otherwise stop MPI operations on this computer
+
+                CALL MPI_FINALIZE ( IERR )
+
+             END IF
+
+          END IF
+
+#endif
       RETURN
       END
 !****************************************************************
@@ -331,7 +351,9 @@
 !
 !****************************************************************
 !
-!MPI      USE MPI
+#ifdef HAVE_MPI
+          USE MPI
+#endif
       USE OCPCOMM4                                                        40.41
       USE M_PARALL                                                        40.31
 !
@@ -411,7 +433,9 @@
 !  8. Subroutines used
 !
 !     INTSTR           Converts integer to string
-!MPI!     MPI_BARRIER      Blocks until all nodes have called this routine
+#ifdef HAVE_MPI
+    !     MPI_BARRIER      Blocks until all nodes have called this routine
+#endif
 !     MSGERR           Writes error message
 !     STRACE           Tracing routine for debugging
 !     TXPBLA           Removes leading and trailing blanks in string
@@ -435,20 +459,22 @@
       DATA IENT/0/
       IF (LTRACE) CALL STRACE (IENT,'SWSYNC')
 
-!MPI!     --- blocks until all nodes have called this routine
-!MPI
-!MPI      CALL MPI_BARRIER ( MPI_COMM_WORLD, IERR )
-!MPI      IF ( IERR.NE.MPI_SUCCESS ) THEN
-!MPI         CHARS(1) = INTSTR(IERR)
-!MPI         CALL TXPBLA(CHARS(1),IF1,IL1)
-!MPI         CHARS(2) = INTSTR(INODE)
-!MPI         CALL TXPBLA(CHARS(2),IF2,IL2)
-!MPI         MSGSTR = 'MPI produces some internal error - '//
-!MPI     &            'return code is '//CHARS(1)(IF1:IL1)//
-!MPI     &            ' and node number is '//CHARS(2)(IF2:IL2)
-!MPI         CALL MSGERR ( 4, MSGSTR )
-!MPI         RETURN
-!MPI      END IF
+#ifdef HAVE_MPI
+    !     --- blocks until all nodes have called this routine
+
+          CALL MPI_BARRIER ( MPI_COMM_WORLD, IERR )
+          IF ( IERR.NE.MPI_SUCCESS ) THEN
+             CHARS(1) = INTSTR(IERR)
+             CALL TXPBLA(CHARS(1),IF1,IL1)
+             CHARS(2) = INTSTR(INODE)
+             CALL TXPBLA(CHARS(2),IF2,IL2)
+             MSGSTR = 'MPI produces some internal error - '//
+         &            'return code is '//CHARS(1)(IF1:IL1)//
+         &            ' and node number is '//CHARS(2)(IF2:IL2)
+             CALL MSGERR ( 4, MSGSTR )
+             RETURN
+          END IF
+#endif
 
       RETURN
       END
@@ -458,7 +484,9 @@
 !
 !****************************************************************
 !
-!MPI      USE MPI
+#ifdef HAVE_MPI
+          USE MPI
+#endif
       USE OCPCOMM4                                                        40.41
       USE M_PARALL                                                        40.31
 !
@@ -544,8 +572,10 @@
 !  8. Subroutines used
 !
 !     INTSTR           Converts integer to string
-!MPI!     MPI_SEND         Immediately sends the data in the active
-!MPI!                      MPI message buffer
+#ifdef HAVE_MPI
+    !     MPI_SEND         Immediately sends the data in the active
+    !                      MPI message buffer
+#endif
 !     MSGERR           Writes error message
 !     STRACE           Tracing routine for debugging
 !     TXPBLA           Removes leading and trailing blanks in string
@@ -560,7 +590,9 @@
 !
 ! 12. Structure
 !
-!MPI!     Data is sent to a neighbour with command MPI_SEND
+#ifdef HAVE_MPI
+    !     Data is sent to a neighbour with command MPI_SEND
+#endif
 !
 ! 13. Source text
 !
@@ -571,19 +603,21 @@
 !     --- if not parallel, return
       IF (.NOT.PARLL) RETURN
 
-!MPI      CALL MPI_SEND ( IPTR, ILEN, ITYPE, IDEST-1,
-!MPI     &                ITAG, MPI_COMM_WORLD, IERR )
-!MPI      IF ( IERR.NE.MPI_SUCCESS ) THEN
-!MPI         CHARS(1) = INTSTR(IERR)
-!MPI         CALL TXPBLA(CHARS(1),IF1,IL1)
-!MPI         CHARS(2) = INTSTR(INODE)
-!MPI         CALL TXPBLA(CHARS(2),IF2,IL2)
-!MPI         MSGSTR = 'MPI produces some internal error - '//
-!MPI     &            'return code is '//CHARS(1)(IF1:IL1)//
-!MPI     &            ' and node number is '//CHARS(2)(IF2:IL2)
-!MPI         CALL MSGERR ( 4, MSGSTR )
-!MPI         RETURN
-!MPI      END IF
+#ifdef HAVE_MPI
+          CALL MPI_SEND ( IPTR, ILEN, ITYPE, IDEST-1,
+         &                ITAG, MPI_COMM_WORLD, IERR )
+          IF ( IERR.NE.MPI_SUCCESS ) THEN
+             CHARS(1) = INTSTR(IERR)
+             CALL TXPBLA(CHARS(1),IF1,IL1)
+             CHARS(2) = INTSTR(INODE)
+             CALL TXPBLA(CHARS(2),IF2,IL2)
+             MSGSTR = 'MPI produces some internal error - '//
+         &            'return code is '//CHARS(1)(IF1:IL1)//
+         &            ' and node number is '//CHARS(2)(IF2:IL2)
+             CALL MSGERR ( 4, MSGSTR )
+             RETURN
+          END IF
+#endif
 
       RETURN
       END
@@ -593,7 +627,9 @@
 !
 !****************************************************************
 !
-!MPI      USE MPI
+#ifdef HAVE_MPI
+          USE MPI
+#endif
       USE OCPCOMM4                                                        40.41
       USE M_PARALL                                                        40.31
 !
@@ -670,19 +706,25 @@
 !     IF2   :     first non-character in string2
 !     IL1   :     last non-character in string1
 !     IL2   :     last non-character in string2
-!MPI!     ISTAT :     MPI status array
+#ifdef HAVE_MPI
+    !     ISTAT :     MPI status array
+#endif
 !     MSGSTR:     string to pass message to call MSGERR
 !
       INTEGER      IENT, IERR, IF1, IF2, IL1, IL2
-!MPI      INTEGER      ISTAT(MPI_STATUS_SIZE)
+#ifdef HAVE_MPI
+          INTEGER      ISTAT(MPI_STATUS_SIZE)
+#endif
       CHARACTER*20 INTSTR, CHARS(2)
       CHARACTER*80 MSGSTR
 !
 !  8. Subroutines used
 !
 !     INTSTR           Converts integer to string
-!MPI!     MPI_RECV         Immediately receives the data in the active
-!MPI!                      MPI message buffer
+#ifdef HAVE_MPI
+    !     MPI_RECV         Immediately receives the data in the active
+    !                      MPI message buffer
+#endif
 !     MSGERR           Writes error message
 !     STRACE           Tracing routine for debugging
 !     TXPBLA           Removes leading and trailing blanks in string
@@ -701,7 +743,9 @@
 !
 ! 12. Structure
 !
-!MPI!     Data is received from a neighbour with command MPI_RECV
+#ifdef HAVE_MPI
+    !     Data is received from a neighbour with command MPI_RECV
+#endif
 !
 ! 13. Source text
 !
@@ -712,19 +756,21 @@
 !     --- if not parallel, return
       IF (.NOT.PARLL) RETURN
 
-!MPI      CALL MPI_RECV ( IPTR, ILEN, ITYPE, ISOURCE-1, ITAG,
-!MPI     &                MPI_COMM_WORLD, ISTAT, IERR )
-!MPI      IF ( IERR.NE.MPI_SUCCESS ) THEN
-!MPI         CHARS(1) = INTSTR(IERR)
-!MPI         CALL TXPBLA(CHARS(1),IF1,IL1)
-!MPI         CHARS(2) = INTSTR(INODE)
-!MPI         CALL TXPBLA(CHARS(2),IF2,IL2)
-!MPI         MSGSTR = 'MPI produces some internal error - '//
-!MPI     &            'return code is '//CHARS(1)(IF1:IL1)//
-!MPI     &            ' and node number is '//CHARS(2)(IF2:IL2)
-!MPI         CALL MSGERR ( 4, MSGSTR )
-!MPI         RETURN
-!MPI      END IF
+#ifdef HAVE_MPI
+          CALL MPI_RECV ( IPTR, ILEN, ITYPE, ISOURCE-1, ITAG,
+         &                MPI_COMM_WORLD, ISTAT, IERR )
+          IF ( IERR.NE.MPI_SUCCESS ) THEN
+             CHARS(1) = INTSTR(IERR)
+             CALL TXPBLA(CHARS(1),IF1,IL1)
+             CHARS(2) = INTSTR(INODE)
+             CALL TXPBLA(CHARS(2),IF2,IL2)
+             MSGSTR = 'MPI produces some internal error - '//
+         &            'return code is '//CHARS(1)(IF1:IL1)//
+         &            ' and node number is '//CHARS(2)(IF2:IL2)
+             CALL MSGERR ( 4, MSGSTR )
+             RETURN
+          END IF
+#endif
 
       RETURN
       END
@@ -734,7 +780,9 @@
 !
 !****************************************************************
 !
-!MPI      USE MPI
+#ifdef HAVE_MPI
+          USE MPI
+#endif
       USE OCPCOMM4                                                        40.41
       USE M_PARALL                                                        40.31
 !
@@ -816,12 +864,16 @@
 !  8. Subroutines used
 !
 !     INTSTR           Converts integer to string
-!MPI!     MPI_BCAST        Broadcasts a message from the master
-!MPI!                      to all other processes of the group
+#ifdef HAVE_MPI
+    !     MPI_BCAST        Broadcasts a message from the master
+    !                      to all other processes of the group
+#endif
 !     MSGERR           Writes error message
 !     STRACE           Tracing routine for debugging
-!TIMG!     SWTSTA           Start timing for a section of code
-!TIMG!     SWTSTO           Stop timing for a section of code
+#ifdef HAVE_TIMG
+     !     SWTSTA           Start timing for a section of code
+     !     SWTSTO           Stop timing for a section of code
+#endif
 !     TXPBLA           Removes leading and trailing blanks in string
 !
 !  9. Subroutines calling
@@ -835,8 +887,10 @@
 !
 ! 12. Structure
 !
-!MPI!     Broadcasts data from the master to all other nodes
-!MPI!     with command MPI_BCAST
+#ifdef HAVE_MPI
+    !     Broadcasts data from the master to all other nodes
+    !     with command MPI_BCAST
+#endif
 !
 ! 13. Source text
 !
@@ -847,18 +901,24 @@
 !     --- if not parallel, return
       IF (.NOT.PARLL) RETURN
 
-!TIMG      CALL SWTSTA(201)
-!MPI      CALL MPI_BCAST ( IPTR, ILEN, ITYPE, MASTER-1,
-!MPI     &                 MPI_COMM_WORLD, IERR )
-!MPI      IF ( IERR.NE.MPI_SUCCESS ) THEN
-!MPI         CHARS = INTSTR(IERR)
-!MPI         CALL TXPBLA(CHARS,IF,IL)
-!MPI         MSGSTR = 'MPI produces some internal error - '//
-!MPI     &            'return code is '//CHARS(IF:IL)
-!MPI         CALL MSGERR ( 4, MSGSTR )
-!MPI         RETURN
-!MPI      END IF
-!TIMG      CALL SWTSTO(201)
+#ifdef HAVE_TIMG
+           CALL SWTSTA(201)
+#endif
+#ifdef HAVE_MPI
+          CALL MPI_BCAST ( IPTR, ILEN, ITYPE, MASTER-1,
+         &                 MPI_COMM_WORLD, IERR )
+          IF ( IERR.NE.MPI_SUCCESS ) THEN
+             CHARS = INTSTR(IERR)
+             CALL TXPBLA(CHARS,IF,IL)
+             MSGSTR = 'MPI produces some internal error - '//
+         &            'return code is '//CHARS(IF:IL)
+             CALL MSGERR ( 4, MSGSTR )
+             RETURN
+          END IF
+#endif
+#ifdef HAVE_TIMG
+           CALL SWTSTO(201)
+#endif
 
       RETURN
       END
@@ -868,7 +928,9 @@
 !
 !****************************************************************
 !
-!MPI      USE MPI
+#ifdef HAVE_MPI
+          USE MPI
+#endif
       USE OCPCOMM4                                                        40.41
       USE M_PARALL                                                        40.31
 !
@@ -960,9 +1022,11 @@
 !  8. Subroutines used
 !
 !     INTSTR           Converts integer to string
-!MPI!     MPI_GATHER       Gathers data from all nodes to the master
-!MPI!     MPI_GATHERV      Gathers different amounts of data from
-!MPI!                      all nodes to the master
+#ifdef HAVE_MPI
+    !     MPI_GATHER       Gathers data from all nodes to the master
+    !     MPI_GATHERV      Gathers different amounts of data from
+    !                      all nodes to the master
+#endif
 !     MSGERR           Writes error message
 !     STRACE           Tracing routine for debugging
 !     TXPBLA           Removes leading and trailing blanks in string
@@ -977,17 +1041,21 @@
 !
 !     if not parallel, return
 !
-!MPI!     gather the array sizes to the master
-!MPI!
+#ifdef HAVE_MPI
+    !     gather the array sizes to the master
+    !
+#endif
 !     check whether enough space has been allocated
 !     for gathered data
 !
 !     calculate starting address of each local array
 !     with respect to the global array
 !
-!MPI!     gather different amounts of data from each processor
-!MPI!     to the master
-!MPI!
+#ifdef HAVE_MPI
+    !     gather different amounts of data from each processor
+    !     to the master
+    !
+#endif
 ! 13. Source text
 !
       SAVE IENT
@@ -1002,18 +1070,20 @@
          ALLOCATE(IDSPLC(0:NPROC-1))
       END IF
 
-!MPI!     --- gather the array sizes to the master
-!MPI
-!MPI      CALL MPI_GATHER( IILEN, 1, SWINT, ICOUNT, 1, SWINT,
-!MPI     &                 MASTER-1, MPI_COMM_WORLD, IERR )
-!MPI      IF ( IERR.NE.MPI_SUCCESS ) THEN
-!MPI         CHARS = INTSTR(IERR)
-!MPI         CALL TXPBLA(CHARS,IF,IL)
-!MPI         MSGSTR = 'MPI produces some internal error - '//
-!MPI     &            'return code is '//CHARS(IF:IL)
-!MPI         CALL MSGERR ( 4, MSGSTR )
-!MPI         RETURN
-!MPI      END IF
+#ifdef HAVE_MPI
+    !     --- gather the array sizes to the master
+
+          CALL MPI_GATHER( IILEN, 1, SWINT, ICOUNT, 1, SWINT,
+         &                 MASTER-1, MPI_COMM_WORLD, IERR )
+          IF ( IERR.NE.MPI_SUCCESS ) THEN
+             CHARS = INTSTR(IERR)
+             CALL TXPBLA(CHARS,IF,IL)
+             MSGSTR = 'MPI produces some internal error - '//
+         &            'return code is '//CHARS(IF:IL)
+             CALL MSGERR ( 4, MSGSTR )
+             RETURN
+          END IF
+#endif
 
 !     --- check whether enough space has been allocated
 !         for gathered data
@@ -1036,19 +1106,21 @@
          END DO
       END IF
 
-!MPI!     --- gather different amounts of data from each processor
-!MPI!         to the master
-!MPI
-!MPI      CALL MPI_GATHERV( IIPTR, IILEN, ITYPE, IOPTR, ICOUNT, IDSPLC,
-!MPI     &                  ITYPE, MASTER-1, MPI_COMM_WORLD, IERR )
-!MPI      IF ( IERR.NE.MPI_SUCCESS ) THEN
-!MPI         CHARS = INTSTR(IERR)
-!MPI         CALL TXPBLA(CHARS,IF,IL)
-!MPI         MSGSTR = 'MPI produces some internal error - '//
-!MPI     &            'return code is '//CHARS(IF:IL)
-!MPI         CALL MSGERR ( 4, MSGSTR )
-!MPI         RETURN
-!MPI      END IF
+#ifdef HAVE_MPI
+    !     --- gather different amounts of data from each processor
+    !         to the master
+
+          CALL MPI_GATHERV( IIPTR, IILEN, ITYPE, IOPTR, ICOUNT, IDSPLC,
+         &                  ITYPE, MASTER-1, MPI_COMM_WORLD, IERR )
+          IF ( IERR.NE.MPI_SUCCESS ) THEN
+             CHARS = INTSTR(IERR)
+             CALL TXPBLA(CHARS,IF,IL)
+             MSGSTR = 'MPI produces some internal error - '//
+         &            'return code is '//CHARS(IF:IL)
+             CALL MSGERR ( 4, MSGSTR )
+             RETURN
+          END IF
+#endif
 
       IF (IAMMASTER) DEALLOCATE(ICOUNT,IDSPLC)
 
@@ -1176,7 +1248,9 @@
 !
 !****************************************************************
 !
-!MPI      USE MPI
+#ifdef HAVE_MPI
+          USE MPI
+#endif
       USE OCPCOMM4
       USE M_PARALL
 !
@@ -1257,12 +1331,16 @@
 !  8. Subroutines used
 !
 !     INTSTR           Converts integer to string
-!MPI!     MPI_ALLREDUCE    Combines values from all processes and
-!MPI!                      distribute the result back to all processes
+#ifdef HAVE_MPI
+    !     MPI_ALLREDUCE    Combines values from all processes and
+    !                      distribute the result back to all processes
+#endif
 !     MSGERR           Writes error message
 !     STRACE           Tracing routine for debugging
-!TIMG!     SWTSTA           Start timing for a section of code
-!TIMG!     SWTSTO           Stop timing for a section of code
+#ifdef HAVE_TIMG
+     !     SWTSTA           Start timing for a section of code
+     !     SWTSTO           Stop timing for a section of code
+#endif
 !     TXPBLA           Removes leading and trailing blanks in string
 !
 !  9. Subroutines calling
@@ -1279,8 +1357,10 @@
 !
 ! 12. Structure
 !
-!MPI!     Performs a global reduction of integers across all nodes
-!MPI!     with command MPI_ALLREDUCE
+#ifdef HAVE_MPI
+    !     Performs a global reduction of integers across all nodes
+    !     with command MPI_ALLREDUCE
+#endif
 !
 ! 13. Source text
 !
@@ -1290,19 +1370,25 @@
 
       ALLOCATE(ITEMP(ILEN))
 
-!TIMG      CALL SWTSTA(202)
-!MPI      CALL MPI_ALLREDUCE ( IARR, ITEMP, ILEN, SWINT,
-!MPI     &                     ITYPRD, MPI_COMM_WORLD, IERR )
-!MPI      IF ( IERR.NE.MPI_SUCCESS ) THEN
-!MPI         CHARS = INTSTR(IERR)
-!MPI         CALL TXPBLA(CHARS,IF,IL)
-!MPI         MSGSTR = 'MPI produces some internal error - '//
-!MPI     &            'return code is '//CHARS(IF:IL)
-!MPI         CALL MSGERR ( 4, MSGSTR )
-!MPI         RETURN
-!MPI      END IF
+#ifdef HAVE_TIMG
+           CALL SWTSTA(202)
+#endif
+#ifdef HAVE_MPI
+          CALL MPI_ALLREDUCE ( IARR, ITEMP, ILEN, SWINT,
+         &                     ITYPRD, MPI_COMM_WORLD, IERR )
+          IF ( IERR.NE.MPI_SUCCESS ) THEN
+             CHARS = INTSTR(IERR)
+             CALL TXPBLA(CHARS,IF,IL)
+             MSGSTR = 'MPI produces some internal error - '//
+         &            'return code is '//CHARS(IF:IL)
+             CALL MSGERR ( 4, MSGSTR )
+             RETURN
+          END IF
+#endif
       IARR = ITEMP
-!TIMG      CALL SWTSTO(202)
+#ifdef HAVE_TIMG
+           CALL SWTSTO(202)
+#endif
 
       DEALLOCATE(ITEMP)
 
@@ -1314,7 +1400,9 @@
 !
 !****************************************************************
 !
-!MPI      USE MPI
+#ifdef HAVE_MPI
+          USE MPI
+#endif
       USE OCPCOMM4
       USE M_PARALL
 !
@@ -1395,12 +1483,16 @@
 !  8. Subroutines used
 !
 !     INTSTR           Converts integer to string
-!MPI!     MPI_ALLREDUCE    Combines values from all processes and
-!MPI!                      distribute the result back to all processes
+#ifdef HAVE_MPI
+    !     MPI_ALLREDUCE    Combines values from all processes and
+    !                      distribute the result back to all processes
+#endif
 !     MSGERR           Writes error message
 !     STRACE           Tracing routine for debugging
-!TIMG!     SWTSTA           Start timing for a section of code
-!TIMG!     SWTSTO           Stop timing for a section of code
+#ifdef HAVE_TIMG
+     !     SWTSTA           Start timing for a section of code
+     !     SWTSTO           Stop timing for a section of code
+#endif
 !     TXPBLA           Removes leading and trailing blanks in string
 !
 !  9. Subroutines calling
@@ -1417,8 +1509,10 @@
 !
 ! 12. Structure
 !
-!MPI!     Performs a global reduction of reals across all nodes
-!MPI!     with command MPI_ALLREDUCE
+#ifdef HAVE_MPI
+    !     Performs a global reduction of reals across all nodes
+    !     with command MPI_ALLREDUCE
+#endif
 !
 ! 13. Source text
 !
@@ -1428,19 +1522,25 @@
 
       ALLOCATE(TEMP(ILEN))
 
-!TIMG      CALL SWTSTA(202)
-!MPI      CALL MPI_ALLREDUCE ( ARR, TEMP, ILEN, SWREAL,
-!MPI     &                     ITYPRD, MPI_COMM_WORLD, IERR )
-!MPI      IF ( IERR.NE.MPI_SUCCESS ) THEN
-!MPI         CHARS = INTSTR(IERR)
-!MPI         CALL TXPBLA(CHARS,IF,IL)
-!MPI         MSGSTR = 'MPI produces some internal error - '//
-!MPI     &            'return code is '//CHARS(IF:IL)
-!MPI         CALL MSGERR ( 4, MSGSTR )
-!MPI         RETURN
-!MPI      END IF
+#ifdef HAVE_TIMG
+           CALL SWTSTA(202)
+#endif
+#ifdef HAVE_MPI
+          CALL MPI_ALLREDUCE ( ARR, TEMP, ILEN, SWREAL,
+         &                     ITYPRD, MPI_COMM_WORLD, IERR )
+          IF ( IERR.NE.MPI_SUCCESS ) THEN
+             CHARS = INTSTR(IERR)
+             CALL TXPBLA(CHARS,IF,IL)
+             MSGSTR = 'MPI produces some internal error - '//
+         &            'return code is '//CHARS(IF:IL)
+             CALL MSGERR ( 4, MSGSTR )
+             RETURN
+          END IF
+#endif
       ARR = TEMP
-!TIMG      CALL SWTSTO(202)
+#ifdef HAVE_TIMG
+           CALL SWTSTO(202)
+#endif
 
       DEALLOCATE(TEMP)
 
@@ -2417,8 +2517,10 @@
 !     STRACE           Tracing routine for debugging
 !     SWRECVNB         Data is received from a neighbour
 !     SWSENDNB         Data is sent to a neighbour
-!TIMG!     SWTSTA           Start timing for a section of code
-!TIMG!     SWTSTO           Stop timing for a section of code
+#ifdef HAVE_TIMG
+     !     SWTSTA           Start timing for a section of code
+     !     SWTSTO           Stop timing for a section of code
+#endif
 !
       LOGICAL STPNOW
 !
@@ -2457,7 +2559,9 @@
 !     --- if not parallel, return
       IF (.NOT.PARLL) RETURN
 
-!TIMG      CALL SWTSTA(203)
+#ifdef HAVE_TIMG
+           CALL SWTSTA(203)
+#endif
 
       NNEIGH = IBLKAD(1)
 
@@ -2509,7 +2613,9 @@
 
       END DO
 
-!TIMG      CALL SWTSTO(203)
+#ifdef HAVE_TIMG
+           CALL SWTSTO(203)
+#endif
 
       RETURN
       END
@@ -3133,15 +3239,19 @@
 !****************************************************************
 !
       USE TIMECOMM                                                        40.41
-!PUN      USE OCPCOMM2
+#ifdef HAVE_PUN
+          USE OCPCOMM2
+#endif
       USE OCPCOMM4                                                        40.41
       USE SWCOMM1                                                         40.41
       USE SWCOMM2                                                         40.51
       USE SWCOMM3                                                         40.41
       USE OUTP_DATA
       USE M_PARALL                                                        40.31
-!PUN      USE SwanGriddata, ONLY: nvertsg                                     41.36
-!PUN      USE SIZES                                                           41.36
+#ifdef HAVE_PUN
+          USE SwanGriddata, ONLY: nvertsg                                     41.36
+          USE SIZES                                                           41.36
+#endif
 !
       IMPLICIT NONE
 !
@@ -3213,14 +3323,20 @@
 !     CORQ  :     current item in list of request outputs
 !     CROSS :     auxiliary logical array
 !     CUOPS :     current item in list of point sets
-!PUN!     EXIST :     logical whether a file exist or not
+#ifdef HAVE_PUN
+    !     EXIST :     logical whether a file exist or not
+#endif
 !     DIF   :     difference between end and actual times
 !     DTTIWR:     to write time string
 !     IC    :     loop variable
 !     IENT  :     number of entries
-!PUN!     ILPOS :     actual length of filename
+#ifdef HAVE_PUN
+    !     ILPOS :     actual length of filename
+#endif
 !     IP    :     loop variable
-!PUN!     IPROC :     loop counter
+#ifdef HAVE_PUN
+    !     IPROC :     loop counter
+#endif
 !     IRQ   :     request number
 !     IT    :     time step counter
 !     IT0   :     integer indicating first step of simulation
@@ -3251,12 +3367,16 @@
 !
       INTEGER   IC, IENT, IP, IRQ, IT, IT0, IT1, IUNIT, MIP, MXK, MYK
       INTEGER   ITMP1, ITMP2, ITMP3, ITMP4, ITMP5, ITMP6
-!PUN      INTEGER   ILPOS, IPROC
+#ifdef HAVE_PUN
+          INTEGER   ILPOS, IPROC
+#endif
       REAL      DIF, TNEXT
       REAL      RTMP1, RTMP2, RTMP3, RTMP4
       REAL, ALLOCATABLE :: XC(:), YC(:), XP(:), YP(:)                     40.51
       LOGICAL   OPENED
-!PUN      LOGICAL   EXIST
+#ifdef HAVE_PUN
+          LOGICAL   EXIST
+#endif
       LOGICAL, ALLOCATABLE :: CROSS(:,:)                                  40.86
       CHARACTER PSTYPE*1, RTYPE*4, SNAMPF*8, DTTIWR*18
       TYPE(ORQDAT), POINTER :: CORQ
@@ -3308,8 +3428,10 @@
       IF (LTRACE) CALL STRACE (IENT,'SWCOLOUT')
 
       IF ( NREOQ.EQ.0 ) RETURN
-!PUN
-!PUN      NPROC = MNPROC                                                      41.36
+#ifdef HAVE_PUN
+
+          NPROC = MNPROC                                                      41.36
+#endif
 
 !     --- do for all COMPUTE commands
 
@@ -3362,12 +3484,14 @@
 
                RTYPE  = CORQ%RQTYPE
                SNAMPF = CORQ%PSNAME
-!PUN
-!PUN               IF (SNAMPF.EQ.'COMPGRID') THEN
-!PUN                  LCOMPGRD=.TRUE.
-!PUN               ELSE
-!PUN                  LCOMPGRD=.FALSE.
-!PUN               ENDIF
+#ifdef HAVE_PUN
+
+                   IF (SNAMPF.EQ.'COMPGRID') THEN
+                      LCOMPGRD=.TRUE.
+                   ELSE
+                      LCOMPGRD=.FALSE.
+                   ENDIF
+#endif
 
                CUOPS => FOPS
                DO
@@ -3388,7 +3512,9 @@
                   MIP = CUOPS%MIP
                ELSE IF ( PSTYPE.EQ.'U' ) THEN
                   MIP = CUOPS%MIP
-!PUN                  IF ( LCOMPGRD ) MIP = nvertsg
+#ifdef HAVE_PUN
+                      IF ( LCOMPGRD ) MIP = nvertsg
+#endif
                   MXK = MIP
                   MYK = 1
                END IF
@@ -3439,46 +3565,48 @@
                XCLMAX = RTMP2
                YCLMIN = RTMP3
                YCLMAX = RTMP4
-!PUN
-!PUN!              --- find global vertex index for output locations
-!PUN!                  stored in array XC
-!PUN
-!PUN               IF ( .NOT.LCOMPGRD ) THEN
-!PUN                  XC = -1.
-!PUN                  YC =  0.
-!PUN                  FILENM = TRIM(LOCALDIR)//DIRCH2//'output.set'
-!PUN                  ILPOS  = LEN(TRIM(LOCALDIR))
-!PUN                  DO IPROC = 1, NPROC
-!PUN                     WRITE(FILENM(ILPOS-3:ILPOS),'(I4.4)') IPROC-1
-!PUN                     IUNIT = HIOPEN+NREOQ*(NPROC+1)+IPROC
-!PUN                     INQUIRE ( FILE=FILENM, EXIST=EXIST, OPENED=OPENED )
-!PUN                     IF ( .NOT.OPENED ) THEN
-!PUN                        IF (EXIST) THEN
-!PUN                           OPEN ( UNIT=IUNIT, FILE=FILENM )
-!PUN                        ELSE
-!PUN                           CALL MSGERR( 4,
-!PUN     &                                'file output.set does not exist' )
-!PUN                           RETURN
-!PUN                        ENDIF
-!PUN                     ENDIF
-!PUN                     READ(IUNIT,'(2I8)') ITMP1, ITMP2
-!PUN                     IF (ITMP1.EQ.IRQ) THEN
-!PUN                        DO IP = 1, ITMP2
-!PUN                           READ (IUNIT,'(2I8)') ITMP3, ITMP4
-!PUN                           XC(ITMP3) = REAL(ITMP4) - 1.
-!PUN                        ENDDO
-!PUN                     ELSE
-!PUN                        CALL MSGERR( 4,
-!PUN     &        'inconsistency found in SWCOLOUT: wrong request number ' )
-!PUN                        RETURN
-!PUN                     ENDIF
-!PUN                  ENDDO
-!PUN               ELSE
-!PUN                  DO IP = 1, MIP
-!PUN                     XC(IP) = REAL(IP) - 1.
-!PUN                     YC(IP) = 0.
-!PUN                  ENDDO
-!PUN               ENDIF
+#ifdef HAVE_PUN
+
+    !              --- find global vertex index for output locations
+    !                  stored in array XC
+
+                   IF ( .NOT.LCOMPGRD ) THEN
+                      XC = -1.
+                      YC =  0.
+                      FILENM = TRIM(LOCALDIR)//DIRCH2//'output.set'
+                      ILPOS  = LEN(TRIM(LOCALDIR))
+                      DO IPROC = 1, NPROC
+                         WRITE(FILENM(ILPOS-3:ILPOS),'(I4.4)') IPROC-1
+                         IUNIT = HIOPEN+NREOQ*(NPROC+1)+IPROC
+                         INQUIRE ( FILE=FILENM, EXIST=EXIST, OPENED=OPENED )
+                         IF ( .NOT.OPENED ) THEN
+                            IF (EXIST) THEN
+                               OPEN ( UNIT=IUNIT, FILE=FILENM )
+                            ELSE
+                               CALL MSGERR( 4,
+         &                                'file output.set does not exist' )
+                               RETURN
+                            ENDIF
+                         ENDIF
+                         READ(IUNIT,'(2I8)') ITMP1, ITMP2
+                         IF (ITMP1.EQ.IRQ) THEN
+                            DO IP = 1, ITMP2
+                               READ (IUNIT,'(2I8)') ITMP3, ITMP4
+                               XC(ITMP3) = REAL(ITMP4) - 1.
+                            ENDDO
+                         ELSE
+                            CALL MSGERR( 4,
+         &        'inconsistency found in SWCOLOUT: wrong request number ' )
+                            RETURN
+                         ENDIF
+                      ENDDO
+                   ELSE
+                      DO IP = 1, MIP
+                         XC(IP) = REAL(IP) - 1.
+                         YC(IP) = 0.
+                      ENDDO
+                   ENDIF
+#endif
 
 !              --- correct problem coordinates with offset values
 
@@ -3540,8 +3668,11 @@
         INQUIRE ( UNIT=IUNIT, OPENED=OPENED )
         IF (OPENED) CLOSE(IUNIT)
       END DO
-!NPUN      DO IUNIT = HIOPEN+NREOQ+1, HIOPEN+NREOQ*(NPROC+1)
-!PUN      DO IUNIT = HIOPEN+NREOQ+1, HIOPEN+NREOQ*(NPROC+1)+NPROC
+#ifdef HAVE_PUN
+      DO IUNIT = HIOPEN+NREOQ+1, HIOPEN+NREOQ*(NPROC+1)+NPROC
+#else
+           DO IUNIT = HIOPEN+NREOQ+1, HIOPEN+NREOQ*(NPROC+1)
+#endif
         INQUIRE ( UNIT=IUNIT, OPENED=OPENED )
         IF (OPENED) CLOSE ( UNIT=IUNIT, STATUS='delete' )
       END DO
@@ -3555,14 +3686,18 @@
 !
 !****************************************************************
 !
-!PUN      USE OCPCOMM2, ONLY: LENFNM, DIRCH2                                  41.36
+#ifdef HAVE_PUN
+          USE OCPCOMM2, ONLY: LENFNM, DIRCH2                                  41.36
+#endif
       USE OCPCOMM4                                                        40.41
       USE SWCOMM1                                                         40.41
       USE SWCOMM3                                                         40.41
       USE SWCOMM4                                                         40.41
       USE OUTP_DATA
       USE M_PARALL                                                        40.31
-!PUN      USE SIZES, ONLY: GLOBALDIR, LOCALDIR                                41.36
+#ifdef HAVE_PUN
+          USE SIZES, ONLY: GLOBALDIR, LOCALDIR                                41.36
+#endif
 !
       IMPLICIT NONE
 !
@@ -3720,9 +3855,11 @@
          FILENM = OUTP_FILES(OQI(2))
          ILPOS  = INDEX(FILENM, '-0')
          IF (ILPOS.NE.0) FILENM = FILENM(1:ILPOS-1)
-!PUN         ILPOS  = LEN(TRIM(LOCALDIR))+2
-!PUN         FILENM = FILENM(ILPOS:LENFNM)
-!PUN         FILENM = TRIM(GLOBALDIR)//DIRCH2//TRIM(FILENM)
+#ifdef HAVE_PUN
+             ILPOS  = LEN(TRIM(LOCALDIR))+2
+             FILENM = FILENM(ILPOS:LENFNM)
+             FILENM = TRIM(GLOBALDIR)//DIRCH2//TRIM(FILENM)
+#endif
          INQUIRE ( FILE=FILENM, OPENED=OPENED, NUMBER=IUT )
 
 !        --- if it is not open or already open thru another request
@@ -3768,22 +3905,32 @@
 
             FILENM = OUTP_FILES(OQI(2))
             ILPOS  = INDEX ( FILENM, ' ' )-1
-!PUN            ILPOS  = LEN(TRIM(LOCALDIR))
+#ifdef HAVE_PUN
+                ILPOS  = LEN(TRIM(LOCALDIR))
+#endif
             DO IPROC = 1, NPROC
                I = IPROC
-!PUN               I = I - 1
+#ifdef HAVE_PUN
+                   I = I - 1
+#endif
                WRITE(FILENM(ILPOS-3:ILPOS),100) I
-!NPUN 100           FORMAT('-',I3.3)
-!PUN 100           FORMAT(I4.4)
+#ifdef HAVE_PUN
+ 100           FORMAT(I4.4)
+#else
+ 100           FORMAT('-',I3.3)
+#endif
                IUNIT = HIOPEN+NREOQ+(NREF-HIOPEN-1)*NPROC+IPROC
                INQUIRE ( FILE=FILENM, EXIST=EXIST, OPENED=OPENED )
                IF ( .NOT.OPENED ) THEN
                   IF (EXIST) THEN
                      OPEN ( UNIT=IUNIT, FILE=FILENM )
                   ELSE
-!NPUN                     MSGSTR= 'file '//FILENM(1:ILPOS)//' does not exist'
-!PUN                     MSGSTR= 'file '//TRIM(FILENM(ILPOS:LENFNM))//
-!PUN     &                       ' does not exist'
+#ifdef HAVE_PUN
+                         MSGSTR= 'file '//TRIM(FILENM(ILPOS:LENFNM))//
+         &                       ' does not exist'
+#else
+               MSGSTR= 'file '//FILENM(1:ILPOS)//' does not exist'
+#endif
                      CALL MSGERR( 4, MSGSTR )
                      RETURN
                   END IF
@@ -3898,14 +4045,18 @@
 !
 !****************************************************************
 !
-!PUN      USE OCPCOMM2, ONLY: LENFNM, DIRCH2                                  41.36
+#ifdef HAVE_PUN
+          USE OCPCOMM2, ONLY: LENFNM, DIRCH2                                  41.36
+#endif
       USE OCPCOMM4                                                        40.41
       USE SWCOMM1                                                         40.41
       USE SWCOMM3                                                         40.41
       USE SWCOMM4                                                         40.41
       USE OUTP_DATA
       USE M_PARALL                                                        40.31
-!PUN      USE SIZES, ONLY: GLOBALDIR, LOCALDIR                                41.36
+#ifdef HAVE_PUN
+          USE SIZES, ONLY: GLOBALDIR, LOCALDIR                                41.36
+#endif
 !
       IMPLICIT NONE
 !
@@ -4055,9 +4206,11 @@
          FILENM = OUTP_FILES(OQI(2))
          ILPOS  = INDEX(FILENM, '-0')
          IF (ILPOS.NE.0) FILENM = FILENM(1:ILPOS-1)
-!PUN         ILPOS  = LEN(TRIM(LOCALDIR))+2
-!PUN         FILENM = FILENM(ILPOS:LENFNM)
-!PUN         FILENM = TRIM(GLOBALDIR)//DIRCH2//TRIM(FILENM)
+#ifdef HAVE_PUN
+             ILPOS  = LEN(TRIM(LOCALDIR))+2
+             FILENM = FILENM(ILPOS:LENFNM)
+             FILENM = TRIM(GLOBALDIR)//DIRCH2//TRIM(FILENM)
+#endif
          INQUIRE ( FILE=FILENM, OPENED=OPENED, NUMBER=IUT )
 
 !        --- if it is not open or already open thru another request
@@ -4084,22 +4237,34 @@
 
             FILENM = OUTP_FILES(OQI(2))
             ILPOS  = INDEX ( FILENM, ' ' )-1
-!PUN            ILPOS  = LEN(TRIM(LOCALDIR))
+#ifdef HAVE_PUN
+                ILPOS  = LEN(TRIM(LOCALDIR))
+#endif
             DO IPROC = 1, NPROC
                I = IPROC
-!PUN               I = I - 1
+#ifdef HAVE_PUN
+                   I = I - 1
+#endif
                WRITE(FILENM(ILPOS-3:ILPOS),100) I
-!NPUN 100           FORMAT('-',I3.3)
-!PUN 100           FORMAT(I4.4)
+#ifdef HAVE_PUN
+     100           FORMAT(I4.4)
+#else
+ 100           FORMAT('-',I3.3)
+#endif
+
                IUNIT = HIOPEN+NREOQ+(NREF-HIOPEN-1)*NPROC+IPROC
                INQUIRE ( FILE=FILENM, EXIST=EXIST, OPENED=OPENED )
                IF ( .NOT.OPENED ) THEN
                   IF (EXIST) THEN
                      OPEN ( UNIT=IUNIT, FILE=FILENM )
                   ELSE
-!NPUN                     MSGSTR= 'file '//FILENM(1:ILPOS)//' does not exist'
-!PUN                     MSGSTR= 'file '//TRIM(FILENM(ILPOS:LENFNM))//
-!PUN     &                       ' does not exist'
+#ifdef HAVE_PUN
+                         MSGSTR= 'file '//TRIM(FILENM(ILPOS:LENFNM))//
+         &                       ' does not exist'
+#else
+         MSGSTR= 'file '//FILENM(1:ILPOS)//' does not exist'
+#endif
+
                      CALL MSGERR( 4, MSGSTR )
                      RETURN
                   END IF
@@ -4240,12 +4405,16 @@
 !
 !****************************************************************
 !
-!PUN      USE OCPCOMM2, ONLY: LENFNM, DIRCH2                                  41.36
+#ifdef HAVE_PUN
+          USE OCPCOMM2, ONLY: LENFNM, DIRCH2                                  41.36
+#endif
       USE OCPCOMM4                                                        40.41
       USE SWCOMM1                                                         40.41
       USE OUTP_DATA
       USE M_PARALL
-!PUN      USE SIZES, ONLY: GLOBALDIR, LOCALDIR                                41.36
+#ifdef HAVE_PUN
+          USE SIZES, ONLY: GLOBALDIR, LOCALDIR                                41.36
+#endif
 !
       IMPLICIT NONE
 !
@@ -4428,9 +4597,11 @@
          FILENM = OUTP_FILES(OQI(2))
          ILPOS  = INDEX(FILENM, '-0')
          IF (ILPOS.NE.0) FILENM = FILENM(1:ILPOS-1)
-!PUN         ILPOS  = LEN(TRIM(LOCALDIR))+2
-!PUN         FILENM = FILENM(ILPOS:LENFNM)
-!PUN         FILENM = TRIM(GLOBALDIR)//DIRCH2//TRIM(FILENM)
+#ifdef HAVE_PUN
+             ILPOS  = LEN(TRIM(LOCALDIR))+2
+             FILENM = FILENM(ILPOS:LENFNM)
+             FILENM = TRIM(GLOBALDIR)//DIRCH2//TRIM(FILENM)
+#endif
          INQUIRE ( FILE=FILENM, OPENED=OPENED, NUMBER=IUT )
          MATLAB = INDEX( FILENM, '.MAT' ).NE.0 .OR.                       40.41
      &            INDEX (FILENM, '.mat' ).NE.0                            40.41
@@ -4453,8 +4624,7 @@
                CLOSE(NREF)
                OPEN(UNIT=NREF, FILE=FILENM, FORM='UNFORMATTED',
      &              STATUS='REPLACE',
-!MatL4     &              ACCESS='DIRECT', RECL=1)
-!MatL5     &              ACCESS='DIRECT', RECL=4)                              41.08
+     &              ACCESS='DIRECT', RECL=4)                              41.08
                IREC(IRQ) = 1                                              40.51
             END IF
 
@@ -4462,22 +4632,34 @@
 
             FILENM = OUTP_FILES(OQI(2))
             ILPOS  = INDEX ( FILENM, ' ' )-1
-!PUN            ILPOS  = LEN(TRIM(LOCALDIR))
+#ifdef HAVE_PUN
+                ILPOS  = LEN(TRIM(LOCALDIR))
+#endif
             DO IPROC = 1, NPROC
                I = IPROC
-!PUN               I = I - 1
+#ifdef HAVE_PUN
+                   I = I - 1
+#endif
                WRITE(FILENM(ILPOS-3:ILPOS),100) I
-!NPUN 100           FORMAT('-',I3.3)
-!PUN 100           FORMAT(I4.4)
+#ifdef HAVE_PUN
+ 100           FORMAT(I4.4)
+#else
+ 100           FORMAT('-',I3.3)
+#endif
+
                IUNIT = HIOPEN+NREOQ+(NREF-HIOPEN-1)*NPROC+IPROC
                INQUIRE ( FILE=FILENM, EXIST=EXIST, OPENED=OPENED )
                IF ( .NOT.OPENED ) THEN
                   IF (EXIST) THEN
                      OPEN ( UNIT=IUNIT, FILE=FILENM )
                   ELSE
-!NPUN                     MSGSTR= 'file '//FILENM(1:ILPOS)//' does not exist'
-!PUN                     MSGSTR= 'file '//TRIM(FILENM(ILPOS:LENFNM))//
-!PUN     &                       ' does not exist'
+#ifdef HAVE_PUN
+                         MSGSTR= 'file '//TRIM(FILENM(ILPOS:LENFNM))//
+         &                       ' does not exist'
+#else
+         MSGSTR= 'file '//FILENM(1:ILPOS)//' does not exist'
+#endif
+
                      CALL MSGERR( 4, MSGSTR )
                      RETURN
                   END IF

@@ -26,12 +26,17 @@
 !
 !***********************************************************************
 !                                                                      *
-!NADC      PROGRAM SWAN
-!ADC      SUBROUTINE SWAN
+#ifdef HAVE_ADC
+          SUBROUTINE SWAN
+#else
+          PROGRAM SWAN
+#endif
 !                                                                      *
 !***********************************************************************
 !
-!PUN      USE MESSENGER                                                       40.95
+#ifdef HAVE_PUN
+          USE MESSENGER                                                       40.95
+#endif
       IMPLICIT NONE
 !
 !
@@ -115,7 +120,9 @@
 
       CALL SWINITMPI                                                      40.30
       IF (STPNOW()) GOTO 999                                              40.30
-!PUN      CALL MSG_INIT()                                                     40.95
+#ifdef HAVE_PUN
+          CALL MSG_INIT()                                                     40.95
+#endif
 
 !     --- start SWAN run
 
@@ -126,15 +133,20 @@
 !     --- stop MPI                                                        40.30
 
       CALL SWEXITMPI                                                      40.30
-!PUN      CALL MSG_FINI()                                                     40.95
+#ifdef HAVE_PUN
+          CALL MSG_FINI()                                                     40.95
+#endif
 !
 !     --- end of MAIN PROGRAM
 !
       END
 !***********************************************************************
 !                                                                      *
-!NADC      SUBROUTINE SWMAIN                                                   40.31 34.01
-!ADC      SUBROUTINE SWMAIN ( ITIME, IT )                                     41.20 40.31 34.01
+#ifdef HAVE_ADC
+          SUBROUTINE SWMAIN ( ITIME, IT )                                     41.20 40.31 34.01
+#else
+          SUBROUTINE SWMAIN                                                   40.31 34.01
+#endif
 !                                                                      *
 !***********************************************************************
 !
@@ -149,14 +161,18 @@
       USE M_GENARR                                                        40.31
       USE M_PARALL                                                        40.31
       USE SwanGriddata                                                    40.80
-!PUN      USE MESSENGER                                                       40.95
-!ADC      USE Couple2Adcirc                                                   41.20
-!ADC      USE Couple2Swan, ONLY: ComputeRadiationStresses,                    41.20
-!ADC     &                       CouplingInterval,
-!ADC     &                       SwanOutput
-!ADC     &                      ,WriteSwanHotStart
-!ADC      USE GLOBAL,      ONLY: ADCIRC_DTDP => DTDP,                         41.20
-!ADC     &                       ADCIRC_STATIM => STATIM
+#ifdef HAVE_PUN
+          USE MESSENGER                                                       40.95
+#endif
+#ifdef HAVE_ADC
+          USE Couple2Adcirc                                                   41.20
+          USE Couple2Swan, ONLY: ComputeRadiationStresses,                    41.20
+         &                       CouplingInterval,
+         &                       SwanOutput
+         &                      ,WriteSwanHotStart
+          USE GLOBAL,      ONLY: ADCIRC_DTDP => DTDP,                         41.20
+         &                       ADCIRC_STATIM => STATIM
+#endif
 !
       IMPLICIT NONE
 !
@@ -264,8 +280,10 @@
 !     ---
 !
 !  4. Argument variables
-!ADC!
-!ADC      INTEGER IT, ITIME                                                   41.20
+#ifdef HAVE_ADC
+    !
+          INTEGER IT, ITIME                                                   41.20
+#endif
 !
 !  6. Local variables
 !
@@ -286,25 +304,28 @@
 !     LOPEN :     indicates whether a file is open                        34.01
 !     MSGSTR:     string to pass message to call MSGERR                   40.41
 !
-!NADC      INTEGER   IUNIT                                                     34.01
-!NADC      INTEGER   IOSTAT, IT0, IT, SAVITE, ILEN                             40.30
-!NADC      INTEGER   INERR                                                     40.31
-!NADC      INTEGER   ISTAT, IF1, IL1                                           40.41
-!NADC      CHARACTER COMPUT *4, DTTIWR*18                                      40.00
-!NADC      CHARACTER*20 NUMSTR, CHARS(1)                                       40.41
-!NADC      CHARACTER*80 MSGSTR                                                 40.41
-!NADC      LOGICAL   LOPEN                                                     34.01
-!ADC!     some variables and arrays have been moved to the                    41.20
-!ADC!     Couple2Adcirc module so that they will persist in memory            41.20
-!ADC      CHARACTER DTTIWR*18                                                 41.20
-!ADC      CHARACTER*20 NUMSTR                                                 41.20
-!NADC
-!NADC      INTEGER, ALLOCATABLE :: CROSS(:)                                    40.80 40.31
-!NADC      INTEGER, ALLOCATABLE :: BGRIDP(:)                                   40.31
-!NADC      REAL   , ALLOCATABLE :: BSPECS(:,:,:,:)                             40.31
-!NADC      REAL   , ALLOCATABLE :: AC1(:,:,:), COMPDA(:,:)                     40.31
-!NADC!
-!NADC      REAL, ALLOCATABLE    :: BLKND(:), BLKNDC(:), OURQT(:)               40.51 40.41
+#ifdef HAVE_ADC
+!     some variables and arrays have been moved to the                    41.20
+!     Couple2Adcirc module so that they will persist in memory            41.20
+          CHARACTER DTTIWR*18                                                 41.20
+          CHARACTER*20 NUMSTR                                                 41.20
+#else
+          INTEGER   IUNIT                                                     34.01
+          INTEGER   IOSTAT, IT0, IT, SAVITE, ILEN                             40.30
+          INTEGER   INERR                                                     40.31
+          INTEGER   ISTAT, IF1, IL1                                           40.41
+          CHARACTER COMPUT *4, DTTIWR*18                                      40.00
+          CHARACTER*20 NUMSTR, CHARS(1)                                       40.41
+          CHARACTER*80 MSGSTR                                                 40.41
+          LOGICAL   LOPEN                                                     34.01
+
+          INTEGER, ALLOCATABLE :: CROSS(:)                                    40.80 40.31
+          INTEGER, ALLOCATABLE :: BGRIDP(:)                                   40.31
+          REAL   , ALLOCATABLE :: BSPECS(:,:,:,:)                             40.31
+          REAL   , ALLOCATABLE :: AC1(:,:,:), COMPDA(:,:)                     40.31
+     !
+          REAL, ALLOCATABLE    :: BLKND(:), BLKNDC(:), OURQT(:)               40.51 40.41
+#endif
 !
 !  7. Common blocks used
 !
@@ -327,9 +348,11 @@
 !     HSOBND: Generates warning if comp. and prescr. Hs differ more than  32.01
 !             a fraction HSRERR at the up-wave boundary                   32.01
 !     SWOUTP
-!TIMG!     SWPRTI                                                              40.23
-!TIMG!     SWTSTA                                                              40.23
-!TIMG!     SWTSTO                                                              40.23
+#ifdef HAVE_TIMG
+     !     SWPRTI                                                              40.23
+     !     SWTSTA                                                              40.23
+     !     SWTSTO                                                              40.23
+#endif
 !     MSGERR : Handles error messages according to severity               40.41
 !     NUMSTR : Converts integer/real to string                            40.41
 !     TXPBLA : Removes leading and trailing blanks in string              40.41
@@ -375,15 +398,19 @@
 !     ----------------------------------------------------------------
 !
 ! 13. Source text
-!ADC!
-!ADC!     --- do the initialization for coupled ADCIRC+SWAN model             41.20
-!ADC      IF ( IT.EQ.0 ) THEN
+#ifdef HAVE_ADC
+    !
+    !     --- do the initialization for coupled ADCIRC+SWAN model             41.20
+          IF ( IT.EQ.0 ) THEN
+#endif
 !
 !     --- initialize various data
-!TIMG
-!TIMG      DCUMTM(:,1:2) = 0D0                                                 40.23
-!TIMG      NCUMTM(:)     = 0                                                   40.23
-!TIMG      CALL SWTSTA(1)                                                      40.23
+#ifdef HAVE_TIMG
+
+           DCUMTM(:,1:2) = 0D0                                                 40.23
+           NCUMTM(:)     = 0                                                   40.23
+           CALL SWTSTA(1)                                                      40.23
+#endif
 
       LEVERR=0                                                            40.23
       MAXERR=1                                                            34.01
@@ -391,14 +418,20 @@
       INERR =0                                                            40.31
       ISTAT =0
 
-!TIMG      CALL SWTSTA(2)                                                      40.23
+#ifdef HAVE_TIMG
+           CALL SWTSTA(2)                                                      40.23
+#endif
       CALL SWINIT (INERR)                                                 40.31 34.01
-!PUN      IF ( MNPROC>1 ) THEN                                                40.95
-!PUN         CALL SwanReadfort18                                              40.95
-!PUN!NADC         CALL MSG_TABLE()                                                 40.95
-!PUN!NADC         CALL MSG_START()                                                 40.95
-!PUN      ENDIF                                                               40.95
-!TIMG      CALL SWTSTO(2)                                                      40.23
+#ifdef HAVE_PUN
+          IF ( MNPROC>1 ) THEN                                                40.95
+             CALL SwanReadfort18                                              40.95
+    !NADC         CALL MSG_TABLE()                                                 40.95
+    !NADC         CALL MSG_START()                                                 40.95
+          ENDIF                                                               40.95
+#endif
+#ifdef HAVE_TIMG
+           CALL SWTSTO(2)                                                      40.23
+#endif
       IF (INERR.GT.0) RETURN                                              34.01
       IF (STPNOW()) RETURN                                                34.01
 !
@@ -406,13 +439,19 @@
 
 !     --- repeat
 
-!NADC      DO
+#ifdef HAVE_NADC
+           DO
+#endif
 
 !       --- read and process user commands
 
-!TIMG        CALL SWTSTA(3)                                                    40.23
+#ifdef HAVE_TIMG
+             CALL SWTSTA(3)                                                    40.23
+#endif
         CALL SWREAD (COMPUT)                                              40.31 30.90
-!TIMG        CALL SWTSTO(3)                                                    40.23
+#ifdef HAVE_TIMG
+             CALL SWTSTO(3)                                                    40.23
+#endif
         IF (STPNOW()) RETURN                                              34.01
 
 !       --- if last command was STOP then exit from repeat
@@ -445,12 +484,16 @@
 
 !       --- do some preparations before computation                       40.31
 
-!TIMG        CALL SWTSTA(4)                                                    40.23
+#ifdef HAVE_TIMG
+             CALL SWTSTA(4)                                                    40.23
+#endif
         CALL SWPREP ( BSPECS, BGRIDP, CROSS , XCGRID, YCGRID, KGRPNT,     40.31
      &                KGRBND, SPCDIR, SPCSIG )                            40.31
         IF (OPTG.EQ.5) CALL SwanPrepComp ( CROSS )                        40.80
         IF (STPNOW()) RETURN                                              40.80
-!TIMG        CALL SWTSTO(4)                                                    40.23
+#ifdef HAVE_TIMG
+             CALL SWTSTO(4)                                                    40.23
+#endif
 
 !       --- check all possible flags and if necessary change
 !           if option is not correct
@@ -476,9 +519,13 @@
            RETURN                                                         40.41
         END IF                                                            40.41
 
-!TIMG        CALL SWTSTA(5)                                                    40.23
+#ifdef HAVE_TIMG
+             CALL SWTSTA(5)                                                    40.23
+#endif
         CALL SWRBC(COMPDA)                                                40.31
-!TIMG        CALL SWTSTO(5)                                                    40.23
+#ifdef HAVE_TIMG
+             CALL SWTSTO(5)                                                    40.23
+#endif
 
 !       --- allocate AC1 in case of non-stationary situation or in case   40.31
 !           of using the S&L scheme                                       40.31
@@ -533,10 +580,14 @@
 !
 !             --- compute default initial conditions
 !
-!TIMG              CALL SWTSTA(6)                                              40.23
+#ifdef HAVE_TIMG
+                   CALL SWTSTA(6)                                              40.23
+#endif
               CALL SWINCO ( AC2   , COMPDA, XCGRID, YCGRID,               40.31
      &                      KGRPNT, SPCDIR, SPCSIG, XYTST )               40.31
-!TIMG              CALL SWTSTO(6)                                              40.23
+#ifdef HAVE_TIMG
+                   CALL SWTSTO(6)                                              40.23
+#endif
 !
 !             --- reset ICOND to prevent second computation of
 !                 initial condition
@@ -546,15 +597,17 @@
           ELSE
             IT0 = 1
           ENDIF
-!ADC
-!ADC!       --- end the LEVERR.GT.MAXERR IF statement                         41.20
-!ADC        ENDIF
-!ADC!
-!ADC!     --- end the initialization for coupled ADCIRC+SWAN                  41.20
-!ADC      ENDIF
-!ADC!
-!ADC!     --- re-open the error IF statement                                  41.20
-!ADC      IF (LEVERR.LE.MAXERR) THEN
+#ifdef HAVE_ADC
+
+    !       --- end the LEVERR.GT.MAXERR IF statement                         41.20
+            ENDIF
+    !
+    !     --- end the initialization for coupled ADCIRC+SWAN                  41.20
+          ENDIF
+    !
+    !     --- re-open the error IF statement                                  41.20
+          IF (LEVERR.LE.MAXERR) THEN
+#endif
 
 !         --- synchronize nodes                                           40.30
 
@@ -562,17 +615,25 @@
           IF (STPNOW()) RETURN                                            40.30
 
 !         --- loop over time steps                                        40.00
-!ADC!             time stepping in the coupled model is handled elsewhere     41.20
+#ifdef HAVE_ADC
+    !             time stepping in the coupled model is handled elsewhere     41.20
+#endif
 
-!NADC          DO 500 IT = IT0, MTC                                            40.00
+#ifdef HAVE_NADC
+               DO 500 IT = IT0, MTC                                            40.00
+#endif
 !
             IF (LEVERR.GT.MAXERR) THEN                                    30.82
               WRITE (PRINTF, 6030) LEVERR                                 30.82
               IF (LEVERR.LT.4) WRITE (PRINTF, 6011)                       40.30 30.82
  6030         FORMAT(' ** No continuation of computation because ',       30.82
      &               'of error level:',I3)                                30.82
-!NADC              EXIT                                                        40.30
-!ADC              RETURN                                                      41.20
+#ifdef HAVE_NADC
+                   EXIT                                                        40.30
+#endif
+#ifdef HAVE_ADC
+                  RETURN                                                      41.20
+#endif
             ENDIF                                                         30.82
 
 !           --- synchronize nodes
@@ -582,12 +643,16 @@
 !
 !           --- update boundary conditions and input fields
 !
-!TIMG            CALL SWTSTA(7)                                                40.23
+#ifdef HAVE_TIMG
+                 CALL SWTSTA(7)                                                40.23
+#endif
             CALL SNEXTI ( BSPECS, BGRIDP, COMPDA, AC1   , AC2   ,         40.31
      &                    SPCSIG, SPCDIR, XCGRID, YCGRID, KGRPNT,         40.31
      &                    XYTST , DEPTH , WLEVL , FRIC  , UXB   ,         40.31
      &                    UYB   , NPLAF , WXI   , WYI   )                 40.55 40.31
-!TIMG            CALL SWTSTO(7)                                                40.23
+#ifdef HAVE_TIMG
+                 CALL SWTSTO(7)                                                40.23
+#endif
             IF (STPNOW()) RETURN                                          34.01
 !
 !           --- synchronize nodes
@@ -602,7 +667,9 @@
 !
 !             --- compute action density for current time step
 !
-!TIMG              CALL SWTSTA(8)                                              40.23
+#ifdef HAVE_TIMG
+                   CALL SWTSTA(8)                                              40.23
+#endif
               IF (OPTG.NE.5) THEN                                         40.80
 !                structured grid                                          40.80
                  CALL SWCOMP( AC1   , AC2   , COMPDA, SPCDIR, SPCSIG,     40.31
@@ -614,7 +681,9 @@
      &                                  SPCSIG, SPCDIR, XYTST ,           40.80
      &                                  CROSS , IT    )                   40.80
               ENDIF                                                       40.80
-!TIMG              CALL SWTSTO(8)                                              40.23
+#ifdef HAVE_TIMG
+                   CALL SWTSTO(8)                                              40.23
+#endif
               IF (STPNOW()) RETURN                                        34.01
 !
 !             --- set ICOND=4 for stationary computation, for next
@@ -640,14 +709,16 @@
 !
             SAVITE = ITEST                                                30.21
             IF (IOUTES .GT. ITEST) ITEST = IOUTES
-!ADC
-!ADC!           --- perform output of SWAN quantities                         41.20
-!ADC            CALL SwanOutput ( ITIME, IT )
-!ADC!           --- write the SWAN hot-start file, if necessary               41.20
-!ADC            IF ( WriteSwanHotStart ) THEN
-!ADC               CALL BACKUP ( AC2,SPCSIG,SPCDIR,KGRPNT,XCGRID,YCGRID )
-!ADC               WriteSwanHotStart = .FALSE.
-!ADC            ENDIF
+#ifdef HAVE_ADC
+
+    !           --- perform output of SWAN quantities                         41.20
+                CALL SwanOutput ( ITIME, IT )
+    !           --- write the SWAN hot-start file, if necessary               41.20
+                IF ( WriteSwanHotStart ) THEN
+                   CALL BACKUP ( AC2,SPCSIG,SPCDIR,KGRPNT,XCGRID,YCGRID )
+                   WriteSwanHotStart = .FALSE.
+                ENDIF
+#endif
 
 !           --- synchronize nodes
 
@@ -656,10 +727,14 @@
 
 !           --- carry out the output requests
 
-!TIMG            CALL SWTSTA(9)                                                40.30
+#ifdef HAVE_TIMG
+                 CALL SWTSTA(9)                                                40.30
+#endif
             CALL SWOUTP ( AC2   , SPCSIG, SPCDIR, COMPDA, XYTST ,         40.31
      &                    KGRPNT, XCGRID, YCGRID, OURQT )                 40.51 40.31
-!TIMG            CALL SWTSTO(9)                                                40.30
+#ifdef HAVE_TIMG
+                 CALL SWTSTO(9)                                                40.30
+#endif
             IF (STPNOW()) RETURN                                          40.30
 !
             IF (ERRPTS.GT.0) REWIND(ERRPTS)                               30.50
@@ -676,24 +751,34 @@
  222          FORMAT(' Time of computation ->  ',A,' in sec:', F12.0)     40.00
             ENDIF                                                         40.00
 
-!NADC 500      CONTINUE
+#ifdef HAVE_NADC
+      500      CONTINUE
+#endif
 
           IF (LEVERR.GT.MAXERR) GOTO 900                                  40.30
 
         END IF
 
-!NADC      END DO
+#ifdef HAVE_NADC
+           END DO
+#endif
 !
  900  CONTINUE
-!ADC!
-!ADC!     --- make sure that radiation stresses are up-to-date                41.20
-!ADC      IF ( IT.NE.MTC ) THEN
-!ADC         CALL ComputeRadiationStresses ( AC2, SPCDIR, SPCSIG )
-!ADC      ENDIF
+#ifdef HAVE_ADC
+    !
+    !     --- make sure that radiation stresses are up-to-date                41.20
+          IF ( IT.NE.MTC ) THEN
+             CALL ComputeRadiationStresses ( AC2, SPCDIR, SPCSIG )
+          ENDIF
+#endif
 !
-!TIMG      CALL SWTSTO(1)                                                      40.23
-!ADC!
-!ADC      IF ( IT.EQ.MTC ) THEN                                               41.20
+#ifdef HAVE_TIMG
+           CALL SWTSTO(1)                                                      40.23
+#endif
+#ifdef HAVE_ADC
+    !
+          IF ( IT.EQ.MTC ) THEN                                               41.20
+#endif
 !
       DO IUNIT=1,HIOPEN                                                   34.01
         INQUIRE(UNIT=IUNIT,OPENED=LOPEN)                                  34.01
@@ -704,7 +789,9 @@
 !         output requests in case of parallel computation                 40.30
 
       CALL SWSYNC                                                         40.30
-!TIMG      CALL SWTSTA(9)                                                      40.30
+#ifdef HAVE_TIMG
+           CALL SWTSTA(9)                                                      40.30
+#endif
       IF ( PARLL ) THEN                                                   40.30
          ALLOCATE (BLKND(MXC*MYC))                                        40.51 40.41
          BLKND = REAL(INODE)                                              40.41
@@ -719,22 +806,28 @@
             DEALLOCATE(BLKNDC)                                            40.41 40.30
          END IF                                                           40.30
       END IF                                                              40.30
-!PUN      !
-!PUN      IF ( MNPROC>1 ) THEN                                                41.36
-!PUN         IF ( IAMMASTER ) THEN                                            41.36
-!PUN            ALLOCATE(BLKNDC(nvertsg))                                     41.36
-!PUN            BLKNDC = 0.                                                   41.36
-!PUN         ENDIF                                                            41.36
-!PUN         CALL SwanPunCollect ( BLKNDC )                                   41.36
-!PUN         IF (STPNOW()) RETURN                                             41.36
-!PUN         IF ( IAMMASTER ) THEN                                            41.36
-!PUN            CALL SWCOLOUT ( OURQT, BLKNDC )                               41.36
-!PUN            DEALLOCATE(BLKNDC)                                            41.36
-!PUN         ENDIF                                                            41.36
-!PUN      ENDIF                                                               41.36
-!TIMG      CALL SWTSTO(9)                                                      40.30
+#ifdef HAVE_PUN
+          !
+          IF ( MNPROC>1 ) THEN                                                41.36
+             IF ( IAMMASTER ) THEN                                            41.36
+                ALLOCATE(BLKNDC(nvertsg))                                     41.36
+                BLKNDC = 0.                                                   41.36
+             ENDIF                                                            41.36
+             CALL SwanPunCollect ( BLKNDC )                                   41.36
+             IF (STPNOW()) RETURN                                             41.36
+             IF ( IAMMASTER ) THEN                                            41.36
+                CALL SWCOLOUT ( OURQT, BLKNDC )                               41.36
+                DEALLOCATE(BLKNDC)                                            41.36
+             ENDIF                                                            41.36
+          ENDIF                                                               41.36
+#endif
+#ifdef HAVE_TIMG
+           CALL SWTSTO(9)                                                      40.30
+#endif
 !
-!TIMG      CALL SWPRTI                                                         40.23
+#ifdef HAVE_TIMG
+           CALL SWPRTI                                                         40.23
+#endif
 !
       INQUIRE(UNIT=PRINTF,OPENED=LOPEN)                                   40.30
       IF (LOPEN) CLOSE(PRINTF)                                            40.30
@@ -749,8 +842,10 @@
       IF (ALLOCATED(OURQT )) DEALLOCATE(OURQT )                           40.51 40.30
       IF (ALLOCATED(BLKND )) DEALLOCATE(BLKND )                           40.41
       CALL SWCLME                                                         40.31
-!ADC!
-!ADC      ENDIF                                                               41.20
+#ifdef HAVE_ADC
+    !
+          ENDIF                                                               41.20
+#endif
 !
       RETURN                                                              30.82
 !     end of subroutine SWMAIN
@@ -4190,7 +4285,9 @@
       USE SWCOMM2                                                         40.41
       USE SWCOMM3                                                         40.41
       USE M_PARALL                                                        40.31
-!PUN      USE SIZES, ONLY: MNPROC
+#ifdef HAVE_PUN
+          USE SIZES, ONLY: MNPROC
+#endif
 !
 !
 !   --|-----------------------------------------------------------|--
@@ -4340,13 +4437,15 @@
         CALL SwanFindPoint ( XP, YP, K )                                  40.80
         IF ( K.LT.0 ) SINCMP = .FALSE.                                    40.80
 !
-!PUN!       --- check if output location is in global subdomain               40.95
-!PUN!
-!PUN        IF ( MNPROC.GT.1 .AND. .NOT.SINCMP ) THEN                         40.95
-!PUN           IF ( XP.GE.XCGMIN .AND. XP.LE.XCGMAX .AND.                     40.95
-!PUN     &          YP.GE.YCGMIN .AND. YP.LE.YCGMAX ) SINCMP = .TRUE.         40.95
-!PUN        ENDIF                                                             40.95
-!PUN!
+#ifdef HAVE_PUN
+    !       --- check if output location is in global subdomain               40.95
+    !
+            IF ( MNPROC.GT.1 .AND. .NOT.SINCMP ) THEN                         40.95
+               IF ( XP.GE.XCGMIN .AND. XP.LE.XCGMAX .AND.                     40.95
+         &          YP.GE.YCGMIN .AND. YP.LE.YCGMAX ) SINCMP = .TRUE.         40.95
+            ENDIF                                                             40.95
+    !
+#endif
       ENDIF
 !
 !     --- check if output location is in global subdomain                 40.31
@@ -6402,15 +6501,17 @@
       USE SWCOMM3                                                         40.41
       USE M_PARALL                                                        40.31
       USE SwanGriddata                                                    40.80
-!ADC      USE Couple2Swan, ONLY: ADCIRC_ETA2 => SWAN_ETA2,                    41.20
-!ADC     &                       ADCIRC_UU2 => SWAN_UU2,
-!ADC     &                       ADCIRC_VV2 => SWAN_VV2,
-!ADC     &                       ADCIRC_WX2 => SWAN_WX2,
-!ADC     &                       ADCIRC_WY2 => SWAN_WY2,
-!ADC     &                       COUPCUR, COUPWIND, COUPWLV,
-!ADC     &                       InterpoWeight
-!ADC     &                      ,ADCIRC_Z0 => SWAN_Z0,
-!ADC     &                       COUPFRIC
+#ifdef HAVE_ADC
+          USE Couple2Swan, ONLY: ADCIRC_ETA2 => SWAN_ETA2,                    41.20
+         &                       ADCIRC_UU2 => SWAN_UU2,
+         &                       ADCIRC_VV2 => SWAN_VV2,
+         &                       ADCIRC_WX2 => SWAN_WX2,
+         &                       ADCIRC_WY2 => SWAN_WY2,
+         &                       COUPCUR, COUPWIND, COUPWLV,
+         &                       InterpoWeight
+         &                      ,ADCIRC_Z0 => SWAN_Z0,
+         &                       COUPFRIC
+#endif
 
       IMPLICIT NONE
 !
@@ -6615,45 +6716,49 @@
       ENDIF
       IF (IFLNDS(IGR1).GT.0) THEN                                         40.03
         IF (INODE.EQ.MASTER) THEN
-!ADC!          --- if we have coupled to the quantities from ADCIRC,          41.20
-!ADC!              then grab them from memory instead of reading them
-!ADC!              from the external file
-!ADC           IF ( (IGR1.EQ.7).AND.COUPWLV ) THEN
-!ADC              DO INDX = 1, nverts
-!ADC                 ARR(INDX) = (1.0 - REAL(InterpoWeight))
-!ADC     &                  * REAL(ADCIRC_ETA2(INDX,1))
-!ADC     &                  + REAL(InterpoWeight)
-!ADC     &                  * REAL(ADCIRC_ETA2(INDX,2))
-!ADC              ENDDO
-!ADC           ELSEIF ( (IGR1.EQ.2).AND.COUPCUR ) THEN
-!ADC              DO INDX = 1, nverts
-!ADC                 ARR(INDX) = (1.0 - REAL(InterpoWeight))
-!ADC     &                  * REAL(ADCIRC_UU2(INDX,1))
-!ADC     &                  + REAL(InterpoWeight)
-!ADC     &                  * REAL(ADCIRC_UU2(INDX,2))
-!ADC              ENDDO
-!ADC           ELSEIF ( (IGR1.EQ.5).AND.COUPWIND ) THEN
-!ADC              DO INDX = 1, nverts
-!ADC                 ARR(INDX) = (1.0 - REAL(InterpoWeight))
-!ADC     &                  * REAL(ADCIRC_WX2(INDX,1))
-!ADC     &                  + REAL(InterpoWeight)
-!ADC     &                  * REAL(ADCIRC_WX2(INDX,2))
-!ADC              ENDDO
-!ADC           ELSEIF ( (IGR1.EQ.4).AND.COUPFRIC ) THEN
-!ADC              DO INDX = 1, nverts
-!ADC                 ARR(INDX) = (1.0 - REAL(InterpoWeight))
-!ADC     &                  * REAL(ADCIRC_Z0(INDX,1))
-!ADC     &                  + REAL(InterpoWeight)
-!ADC     &                  * REAL(ADCIRC_Z0(INDX,2))
-!ADC              ENDDO
-!ADC           ELSE
+#ifdef HAVE_ADC
+    !          --- if we have coupled to the quantities from ADCIRC,          41.20
+    !              then grab them from memory instead of reading them
+    !              from the external file
+               IF ( (IGR1.EQ.7).AND.COUPWLV ) THEN
+                  DO INDX = 1, nverts
+                     ARR(INDX) = (1.0 - REAL(InterpoWeight))
+         &                  * REAL(ADCIRC_ETA2(INDX,1))
+         &                  + REAL(InterpoWeight)
+         &                  * REAL(ADCIRC_ETA2(INDX,2))
+                  ENDDO
+               ELSEIF ( (IGR1.EQ.2).AND.COUPCUR ) THEN
+                  DO INDX = 1, nverts
+                     ARR(INDX) = (1.0 - REAL(InterpoWeight))
+         &                  * REAL(ADCIRC_UU2(INDX,1))
+         &                  + REAL(InterpoWeight)
+         &                  * REAL(ADCIRC_UU2(INDX,2))
+                  ENDDO
+               ELSEIF ( (IGR1.EQ.5).AND.COUPWIND ) THEN
+                  DO INDX = 1, nverts
+                     ARR(INDX) = (1.0 - REAL(InterpoWeight))
+         &                  * REAL(ADCIRC_WX2(INDX,1))
+         &                  + REAL(InterpoWeight)
+         &                  * REAL(ADCIRC_WX2(INDX,2))
+                  ENDDO
+               ELSEIF ( (IGR1.EQ.4).AND.COUPFRIC ) THEN
+                  DO INDX = 1, nverts
+                     ARR(INDX) = (1.0 - REAL(InterpoWeight))
+         &                  * REAL(ADCIRC_Z0(INDX,1))
+         &                  + REAL(InterpoWeight)
+         &                  * REAL(ADCIRC_Z0(INDX,2))
+                  ENDDO
+               ELSE
+#endif
            CALL INAR2D( ARR, MXG(IGR1), MYG(IGR1),                        40.31 40.02
      &                  IFLNDF(IGR1),
      &                  IFLNDS(IGR1), IFLIFM(IGR1), IFLFRM(IGR1),
      &                  IFLIDL(IGR1), IFLFAC(IGR1),
      &                  IFLNHD(IGR1), IFLNHF(IGR1))
            IF (STPNOW()) RETURN                                           34.01
-!ADC           ENDIF
+#ifdef HAVE_ADC
+               ENDIF
+#endif
         END IF
         CALL SWBROADC(IFLIDL(IGR1),1,SWINT)                               40.30
         IF (IFLIDL(IGR1).LT.0) THEN
@@ -6676,28 +6781,32 @@
         IFLTIM(IGR2) = IFLTIM(IGR1)
         IF (IFLNDS(IGR2).GT.0) THEN                                       40.03
           IF (INODE.EQ.MASTER) THEN                                       40.30
-!ADC!            added these lines to grab the y-components from memory       41.20
-!ADC             IF ( (IGR2.EQ.3).AND.COUPCUR ) THEN
-!ADC               DO INDX = 1, nverts
-!ADC                 ARR2(INDX) = (1.0 - REAL(InterpoWeight))
-!ADC     &                   * REAL(ADCIRC_VV2(INDX,1))
-!ADC     &                   + REAL(InterpoWeight)
-!ADC     &                   * REAL(ADCIRC_VV2(INDX,2))
-!ADC               ENDDO
-!ADC             ELSEIF ( (IGR2.EQ.6).AND.COUPWIND ) THEN
-!ADC               DO INDX = 1, nverts
-!ADC                 ARR2(INDX) = (1.0 - REAL(InterpoWeight))
-!ADC     &                   * REAL(ADCIRC_WY2(INDX,1))
-!ADC     &                   + REAL(InterpoWeight)
-!ADC     &                   * REAL(ADCIRC_WY2(INDX,2))
-!ADC               ENDDO
-!ADC             ELSE
+#ifdef HAVE_ADC
+    !            added these lines to grab the y-components from memory       41.20
+                 IF ( (IGR2.EQ.3).AND.COUPCUR ) THEN
+                   DO INDX = 1, nverts
+                     ARR2(INDX) = (1.0 - REAL(InterpoWeight))
+         &                   * REAL(ADCIRC_VV2(INDX,1))
+         &                   + REAL(InterpoWeight)
+         &                   * REAL(ADCIRC_VV2(INDX,2))
+                   ENDDO
+                 ELSEIF ( (IGR2.EQ.6).AND.COUPWIND ) THEN
+                   DO INDX = 1, nverts
+                     ARR2(INDX) = (1.0 - REAL(InterpoWeight))
+         &                   * REAL(ADCIRC_WY2(INDX,1))
+         &                   + REAL(InterpoWeight)
+         &                   * REAL(ADCIRC_WY2(INDX,2))
+                   ENDDO
+                 ELSE
+#endif
              CALL INAR2D( ARR2, MXG(IGR2), MYG(IGR2),                     40.31 40.02
      &                    IFLNDF(IGR2),
      &                    IFLNDS(IGR2), IFLIFM(IGR2), IFLFRM(IGR2),
      &                    IFLIDL(IGR2), IFLFAC(IGR2), IFLNHD(IGR2), 0)
              IF (STPNOW()) RETURN                                         34.01
-!ADC             ENDIF
+#ifdef HAVE_ADC
+                 ENDIF
+#endif
           END IF
           CALL SWBROADC(ARR2,MXG(IGR2)*MYG(IGR2),SWREAL)                  40.31 40.30
         ENDIF                                                             40.03

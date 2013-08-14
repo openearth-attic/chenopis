@@ -175,8 +175,7 @@
            CLOSE(NREF)                                                    40.30
            OPEN(UNIT=NREF, FILE=FILENM, FORM='UNFORMATTED',               40.30
      &          STATUS='REPLACE',
-!MatL4     &          ACCESS='DIRECT', RECL=1)                                  40.30
-!MatL5     &          ACCESS='DIRECT', RECL=4)                                  41.08 40.30
+     &          ACCESS='DIRECT', RECL=4)                                  41.08 40.30
            IREC(IRQ) = 1                                                  40.51
         END IF
       ENDIF
@@ -522,7 +521,9 @@
       USE SWCOMM1                                                         40.41
       USE OUTP_DATA
       USE M_PARALL                                                        40.51
-!PUN      USE SIZES, ONLY: MYPROC
+#ifdef HAVE_PUN
+          USE SIZES, ONLY: MYPROC
+#endif
 !
       IMPLICIT NONE
 !
@@ -636,8 +637,11 @@
       END IF
       NVAR = OQI(3)
 
-!NPUN      IPROC = INODE
-!PUN      IPROC = MYPROC
+#ifdef HAVE_PUN
+          IPROC = MYPROC
+#else
+          IPROC = INODE
+#endif
 
       DO JVAR = 1, NVAR
          IVTYPE = IVTYP(JVAR)
@@ -677,7 +681,9 @@
       USE OUTP_DATA                                                       40.13
       USE TIMECOMM                                                        40.41
       USE M_PARALL                                                        40.51
-!PUN      USE SIZES, ONLY: MYPROC, MNPROC
+#ifdef HAVE_PUN
+          USE SIZES, ONLY: MYPROC, MNPROC
+#endif
 !
 !
 !   --|-----------------------------------------------------------|--
@@ -1019,8 +1025,11 @@
         IF (NSTATM.EQ.1) WRITE (NREF, 102) CHTIME, 'date and time'
       ENDIF
       DO 70 IP = 1, MIP
-!NPUN       IF ( .NOT.PARLL .OR. IONOD(IP).EQ.INODE ) THEN                     40.51
-!PUN       IF ( MNPROC.EQ.1 .OR. IONOD(IP).EQ.MYPROC ) THEN                   41.36
+#ifdef HAVE_PUN
+           IF ( MNPROC.EQ.1 .OR. IONOD(IP).EQ.MYPROC ) THEN                   41.36
+#else
+           IF ( .NOT.PARLL .OR. IONOD(IP).EQ.INODE ) THEN                     40.51
+#endif
         LINKAR = 1
         OUTLIN = '    '
         IF (RTYPE.EQ.'TABI') THEN
@@ -1193,7 +1202,9 @@
       USE SWCOMM4                                                         40.41
       USE OUTP_DATA                                                       40.13
       USE M_PARALL                                                        40.31
-!PUN      USE SIZES, ONLY: MYPROC, MNPROC
+#ifdef HAVE_PUN
+          USE SIZES, ONLY: MYPROC, MNPROC
+#endif
 !
 !
 !   --|-----------------------------------------------------------|--
@@ -1480,14 +1491,20 @@
         ENDIF                                                             40.80
         DEP = VOQ(IP,VOQR(4))
         IF (DEP.LE.0. .OR. EQREAL(DEP,OVEXCV(4))) THEN
-!NPUN          IF ( .NOT.PARLL .OR. IONOD(IP).EQ.INODE )                       40.51
-!PUN          IF ( MNPROC.EQ.1 .OR. IONOD(IP).EQ.MYPROC )                     41.36
+#ifdef HAVE_PUN
+              IF ( MNPROC.EQ.1 .OR. IONOD(IP).EQ.MYPROC )                     41.36
+#else
+              IF ( .NOT.PARLL .OR. IONOD(IP).EQ.INODE )                       40.51
+#endif
      &       WRITE (NREF, 220) 'NODATA'                                   40.00
  220      FORMAT (A6)
           GOTO 290
         ENDIF
-!NPUN        IF ( PARLL .AND. IONOD(IP).NE.INODE ) GOTO 290                    40.51
-!PUN        IF ( MNPROC.GT.1 .AND. IONOD(IP).NE.MYPROC ) GOTO 290             41.36
+#ifdef HAVE_PUN
+            IF ( MNPROC.GT.1 .AND. IONOD(IP).NE.MYPROC ) GOTO 290             41.36
+#else
+            IF ( PARLL .AND. IONOD(IP).NE.INODE ) GOTO 290                    40.51
+#endif
         IF (ICUR.GT.0) THEN
           UX = VOQ(IP,VOQR(5))
           UY = VOQ(IP,VOQR(5)+1)
