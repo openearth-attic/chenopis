@@ -72,9 +72,11 @@ chenopis_SOURCES=\
 	ocpmix.F
 
 hcat_SOURCES=swanhcat.F
-
-
+hcat_DIST=hcat.nml
 unhcat_SOURCES=HottifySWAN.F90
+clean-local:
+	rm -f *.mod
+
 
 
 
