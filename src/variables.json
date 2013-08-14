@@ -1,0 +1,1067 @@
+{
+    "default":
+    {
+        "type": "double",
+        "modules": [],
+        "unit": "-",
+        "pointer": false,
+        "shape": [],
+        "use": true
+    },
+    "comment": "in swan most variables are stored in the global compda structure",
+    "modules": ["swcomm3", "swcomm1", "m_genarr", "outp_data"],
+    "dimensions":
+    {
+        "MDC": "Maximum counter of directional distribution in computational model (2PI / DDIR + 1)",
+        "MSC": "Maximum counter of relative frequency in computational model",
+        "MCGRD":"number of wet grid points of the computational grid"
+    },
+    "variables":
+    [
+        {
+            "name": "DISS",
+            "internal": "COMPDA(:,JDISS)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "total dissipation within array COMPDA",
+            "index": 2
+        },
+        {
+            "name": "UBOT",
+            "internal": "COMPDA(:,JUBOT)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "bottom orbital velocity within array COMPDA",
+            "long_name": "rms value maximum of the orbital velocity near bottom",
+            "index": 3
+        },
+        {
+            "name": "QB",
+            "internal": "COMPDA(:,JQB)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "fraction of breaking waves within array COMPDA",
+            "index": 4
+        },
+        {
+            "name": "STP",
+            "internal": "COMPDA(:,JSTP)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "steepness within array COMPDA",
+            "index": 5
+        },
+        {
+            "name": "DHS",
+            "internal": "COMPDA(:,JDHS)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "wave height correction within array COMPDA",
+            "index": 6
+        },
+        {
+            "name": "DP1",
+            "internal": "COMPDA(:,JDP1)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "old depth within array COMPDA",
+            "index": 7
+        },
+        {
+            "name": "DP2",
+            "internal": "COMPDA(:,JDP2)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "new depth within array COMPDA",
+            "index": 8
+        },
+        {
+            "name": "VX1",
+            "internal": "COMPDA(:,JVX1)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "x of old current velocity within array COMPDA",
+            "index": 9
+        },
+        {
+            "name": "VY1",
+            "internal": "COMPDA(:,JVY1)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "y of old current velocity within array COMPDA",
+            "index": 10
+        },
+        {
+            "name": "VX2",
+            "internal": "COMPDA(:,JVX2)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "x of new current velocity within array COMPDA",
+            "standard_name": "surface_eastward_sea_water_velocity",
+            "index": 11
+        },
+        {
+            "name": "VY2",
+            "internal": "COMPDA(:,JVY2)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "y of new current velocity within array COMPDA",
+            "standard_name": "surface_northward_sea_water_velocity",
+            "index": 12
+        },
+        {
+            "name": "VX3",
+            "internal": "COMPDA(:,JVX3)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "x of last read current velocity within array COMPDA",
+            "index": 13
+        },
+        {
+            "name": "VY3",
+            "internal": "COMPDA(:,JVY3)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "y of last read current velocity within array COMPDA",
+            "index": 14
+        },
+        {
+            "name": "DP3",
+            "internal": "COMPDA(:,JDP3)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "last read depth within array COMPDA",
+            "index": 15
+        },
+        {
+            "name": "WX2",
+            "internal": "COMPDA(:,JWX2)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "x of new wind velocity within array COMPDA",
+            "standard_name": "eastward_10m_wind",
+            "index": 16
+        },
+        {
+            "name": "WY2",
+            "internal": "COMPDA(:,JWY2)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "y of new wind velocity within array COMPDA",
+            "standard_name": "northward_10m_wind",
+            "index": 17
+        },
+        {
+            "name": "WX3",
+            "internal": "COMPDA(:,JWX3)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "x of last read wind velocity within array COMPDA",
+            "index": 18
+        },
+        {
+            "name": "WY3",
+            "internal": "COMPDA(:,JWY3)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "y of last read wind velocity within array COMPDA",
+            "index": 19
+        },
+        {
+            "name": "DTM",
+            "internal": "COMPDA(:,JDTM)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "wave period correction within array COMPDA",
+            "index": 20
+        },
+        {
+            "name": "LEAK",
+            "internal": "COMPDA(:,JLEAK)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "leak within array COMPDA",
+            "index": 21
+        },
+        {
+            "name": "WLV1",
+            "internal": "COMPDA(:,JWLV1)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "old water level within array COMPDA",
+            "standard_name": "sea_surface_height_above_sea_level",
+            "index": 22
+        },
+        {
+            "name": "WLV2",
+            "internal": "COMPDA(:,JWLV2)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "new water level within array COMPDA",
+            "standard_name": "sea_surface_height_above_sea_level",
+            "index": 24
+        },
+        {
+            "name": "WLV3",
+            "internal": "COMPDA(:,JWLV3)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "standard_name": "sea_surface_height_above_sea_level",
+            "long_name": "last read water level within array COMPDA",
+            "index": 23
+        },
+        {
+            "name": "HSIBC",
+            "internal": "COMPDA(:,JHSIBC)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "significant wave height from boundary condition in array COMPDA",
+            "index": 25
+        },
+        {
+            "name": "HS",
+            "internal": "COMPDA(:,JHS)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "significant wave height Hs within array COMPDA",
+            "index": 26
+        },
+        {
+            "name": "URSEL",
+            "internal": "COMPDA(:,JURSEL)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "Ursell number as used in Triad computation",
+            "index": 27
+        },
+        {
+            "name": "BOTLV",
+            "internal": "COMPDA(:,JBOTLV)",
+            "shape": ["MCGRD"],
+            "type": "float",
+            "pointer": true,
+            "long_name": "bottom level within array COMPDA",
+            "index": 28
+        },
+        {
+            "name":"JFRC2",
+            "shape": [],
+            "standard_name": "bottom_friction_coefficient",
+            "use": false
+        },
+        {
+            "name":"P2DC",
+            "shape": [],
+            "standard_name": "wave_induced_charnock_parameter",
+            "prepare": "CALL SWFLD_CHARNK(P2DC, EXPORT_CHNK_TYPE)",
+            "use": false
+        },
+        {
+            "name": "hrms",
+            "use": false,
+            "comment": "from output"
+        },
+        {
+            "name":"tmm10",
+            "name": "tm01",
+            "compute": "",
+            "long_name": "mean absolute wave period (ook wel) Tm01",
+            "use": false,
+            "comment": "from output"
+        },
+
+        {
+            "name": "rtp",
+            "long_name" : "relative peak wave period",
+            "use": false,
+            "comment": "from output"
+        },
+
+        {
+            "name": "pdi",
+            "long_name": "peak wave direction",
+            "use": false,
+            "comment": "from output"
+        },
+        {
+            "name": "dir",
+            "long_name": "mean wave direction",
+            "use": false,
+            "comment": "from output"
+        },
+        {
+            "name": "fx",
+            "long_name": "x-component of wave induced force",
+            "use": false,
+            "comment": "swanfields"
+        },
+        {
+            "name": "fy",
+            "long_name": "y-component of wave induced force",
+            "use": false,
+            "comment": "swanfields"
+        },
+        {
+            "name": "AC1",
+            "shape": ["MDC", "MSC", "MCGRD"],
+            "long_name": "",
+            "pointer": true
+        },
+        {
+            "name": "AC2",
+            "type": "float",
+            "shape": ["MDC", "MSC", "MCGRD"],
+            "long_name": "",
+            "pointer": true
+        },
+        {
+            "name": "WLEVL",
+            "type": "float",
+            "shape": ["MCGRD"],
+            "long_name": "sea water level",
+            "comment": "or maybe ALLOCATE(WLEVL(MXG(IGR1)*MYG(IGR1)), see swanpre1.for",
+            "pointer": true
+        },
+        {
+            "name": "SPCSIG",
+            "type": "float",
+            "shape": ["MSC"],
+            "long_name": "",
+            "pointer": true
+        },
+        {
+            "name": "SPCDIR",
+            "type": "float",
+            "shape": ["MDC", "6"],
+            "long_name": "",
+            "pointer": true
+        },
+        {
+            "name": "XCGRID",
+            "type": "float",
+            "shape": ["MXC", "MYC"],
+            "long_name": "",
+            "pointer": true
+        },
+        {
+            "name": "YCGRID",
+            "type": "float",
+            "shape": ["MXC", "MYC"],
+            "long_name": "",
+            "pointer": true
+        },
+        {
+            "name": "DDIR",
+            "type": "float",
+            "shape": [],
+            "long_name": "",
+            "pointer": false
+        },
+        {
+            "name": "PWTAIL",
+            "type": "float",
+            "shape": ["10"],
+            "long_name": "",
+            "pointer": true
+        },
+        {
+            "name": "VOQ",
+            "type": "float",
+            "shape": ["MIPSAVE*NVOQPSAVE"],
+            "internal": "VOQSAVE",
+            "long_name": "",
+            "pointer": true
+        },
+        {
+            "name": "VOQ2",
+            "type": "float",
+            "shape": ["MIPSAVE*NVOQPSAVE2"],
+            "internal": "VOQSAVE2",
+            "long_name": "",
+            "pointer": true
+        },
+        {
+            "name": "VOQR",
+            "type": "int",
+            "shape": ["71"],
+            "internal": "VOQRSAVE",
+            "long_name": "",
+            "pointer": true
+        },
+        {
+            "name": "VOQR2",
+            "type": "int",
+            "shape": ["71"],
+            "internal": "VOQRSAVE2",
+            "long_name": "",
+            "pointer": true
+        },
+
+        {
+            "name": "XP",
+            "index": 1,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(1)-1)+1:MIPSAVE*VOQRSAVE(1))",
+            "description": "X user coordinate",
+            "unit": "UL",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "YP",
+            "index": 2,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(2)-1)+1:MIPSAVE*VOQRSAVE(2))",
+            "description": "Y user coordinate",
+            "unit": "UL",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "DIST",
+            "index": 3,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(3)-1)+1:MIPSAVE*VOQRSAVE(3))",
+            "description": "distance along output curve",
+            "unit": "UL",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "DEPTH",
+            "index": 4,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(4)-1)+1:MIPSAVE*VOQRSAVE(4))",
+            "description": "Depth",
+            "unit": "UH",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "VEL",
+            "index": 5,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(5)-1)+1:MIPSAVE*VOQRSAVE(5))",
+            "description": "Current velocity",
+            "unit": "UV",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "UBOT_OUTPUT",
+            "index": 6,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(6)-1)+1:MIPSAVE*VOQRSAVE(6))",
+            "description": "S of maxima of orbital velocity near the bottom",
+            "unit": "UV",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "DISSIP",
+            "index": 7,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(7)-1)+1:MIPSAVE*VOQRSAVE(7))",
+            "description": "Energy dissipation",
+            "unit": "'m2/s'",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "QB_OUTPUT",
+            "index": 8,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(8)-1)+1:MIPSAVE*VOQRSAVE(8))",
+            "description": "Fraction breaking waves",
+            "unit": "' '",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "LEAK_OUTPUT",
+            "index": 9,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(9)-1)+1:MIPSAVE*VOQRSAVE(9))",
+            "description": "Energy leak over spectral boundaries",
+            "unit": "'m2/s'",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "HSIG",
+            "index": 10,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(10)-1)+1:MIPSAVE*VOQRSAVE(10))",
+            "description": "Significant wave height",
+            "unit": "UH",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "TM01",
+            "index": 11,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(11)-1)+1:MIPSAVE*VOQRSAVE(11))",
+            "description": "Average absolute wave period",
+            "unit": "UT",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "RTpeak",
+            "index": 12,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(12)-1)+1:MIPSAVE*VOQRSAVE(12))",
+            "description": "Relative peak period",
+            "unit": "UT",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "DIR",
+            "index": 13,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(13)-1)+1:MIPSAVE*VOQRSAVE(13))",
+            "description": "Average wave direction",
+            "unit": "UDI",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "PKDir",
+            "index": 14,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(14)-1)+1:MIPSAVE*VOQRSAVE(14))",
+            "description": "direction of the peak of the spectrum",
+            "unit": "UDI",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "TDir",
+            "index": 15,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(15)-1)+1:MIPSAVE*VOQRSAVE(15))",
+            "description": "direction of the energy transport",
+            "unit": "UDI",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "DSPR",
+            "index": 16,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(16)-1)+1:MIPSAVE*VOQRSAVE(16))",
+            "description": "directional spreading",
+            "unit": "UDI",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "WLEN",
+            "index": 17,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(17)-1)+1:MIPSAVE*VOQRSAVE(17))",
+            "description": "Average wave length",
+            "unit": "UL",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "STEEPN",
+            "index": 18,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(18)-1)+1:MIPSAVE*VOQRSAVE(18))",
+            "description": "Wave steepness",
+            "unit": "' '",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "TRANSP",
+            "index": 19,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(19)-1)+1:MIPSAVE*VOQRSAVE(19))",
+            "description": "Wave energy transport",
+            "unit": "m3/s",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "WForce",
+            "index": 20,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(20)-1)+1:MIPSAVE*VOQRSAVE(20))",
+            "description": "Wave driven force per unit surface",
+            "unit": "UF",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "ACDens",
+            "index": 21,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(21)-1)+1:MIPSAVE*VOQRSAVE(21))",
+            "description": "spectral action density",
+            "unit": "'m2s'",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "ENDens_OUTPUT",
+            "index": 22,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(22)-1)+1:MIPSAVE*VOQRSAVE(22))",
+            "description": "spectral energy density",
+            "unit": "'m2'",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "AUX",
+            "index": 23,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(23)-1)+1:MIPSAVE*VOQRSAVE(23))",
+            "description": "auxiliary variable",
+            "unit": "' '",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "XC",
+            "index": 24,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(24)-1)+1:MIPSAVE*VOQRSAVE(24))",
+            "description": "X computational grid coordinate",
+            "unit": "' '",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "YC",
+            "index": 25,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(25)-1)+1:MIPSAVE*VOQRSAVE(25))",
+            "description": "Y computational grid coordinate",
+            "unit": "' '",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "WINDV",
+            "index": 26,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(26)-1)+1:MIPSAVE*VOQRSAVE(26))",
+            "description": "Wind velocity at 10 m above sea level",
+            "unit": "UV",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "FRCoef",
+            "index": 27,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(27)-1)+1:MIPSAVE*VOQRSAVE(27))",
+            "description": "Bottom friction coefficient",
+            "unit": "' '",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "RTm01",
+            "index": 28,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(28)-1)+1:MIPSAVE*VOQRSAVE(28))",
+            "description": "Average relative wave period",
+            "unit": "UT",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "ENDens",
+            "index": 29,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(29)-1)+1:MIPSAVE*VOQRSAVE(29))",
+            "description": "energy density integrated over direction",
+            "unit": "'m2'",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "DHs",
+            "index": 30,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(30)-1)+1:MIPSAVE*VOQRSAVE(30))",
+            "description": "difference in Hs between iterations",
+            "unit": "UH",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "DTm",
+            "index": 31,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(31)-1)+1:MIPSAVE*VOQRSAVE(31))",
+            "description": "difference in Tm between iterations",
+            "unit": "UT",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "TM02",
+            "index": 32,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(32)-1)+1:MIPSAVE*VOQRSAVE(32))",
+            "description": "Zero-crossing period",
+            "unit": "UT",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "FSpr",
+            "index": 33,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(33)-1)+1:MIPSAVE*VOQRSAVE(33))",
+            "description": "Frequency spectral width (Kappa)",
+            "unit": "' '",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "URMS",
+            "index": 34,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(34)-1)+1:MIPSAVE*VOQRSAVE(34))",
+            "description": "RMS of orbital velocity near the bottom",
+            "unit": "UV",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "UFRIC",
+            "index": 35,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(35)-1)+1:MIPSAVE*VOQRSAVE(35))",
+            "description": "Friction velocity",
+            "unit": "UV",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "ZLEN",
+            "index": 36,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(36)-1)+1:MIPSAVE*VOQRSAVE(36))",
+            "description": "Zero velocity thickness of boundary layer",
+            "unit": "UL",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "TAUW",
+            "index": 37,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(37)-1)+1:MIPSAVE*VOQRSAVE(37))",
+            "description": "    ",
+            "unit": "' '",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "CDRAG",
+            "index": 38,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(38)-1)+1:MIPSAVE*VOQRSAVE(38))",
+            "description": "Drag coefficient",
+            "unit": "' '",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "SETUP",
+            "index": 39,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(39)-1)+1:MIPSAVE*VOQRSAVE(39))",
+            "description": "Setup due to waves",
+            "unit": "m",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "TIME",
+            "index": 40,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(40)-1)+1:MIPSAVE*VOQRSAVE(40))",
+            "description": "Date-time",
+            "unit": "",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "TSEC",
+            "index": 41,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(41)-1)+1:MIPSAVE*VOQRSAVE(41))",
+            "description": "Time in seconds from reference time",
+            "unit": "s",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "PERIOD",
+            "index": 42,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(42)-1)+1:MIPSAVE*VOQRSAVE(42))",
+            "description": "Average absolute wave period",
+            "unit": "UT",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "RPeriod",
+            "index": 43,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(43)-1)+1:MIPSAVE*VOQRSAVE(43))",
+            "description": "Average relative wave period",
+            "unit": "UT",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "HSWELL",
+            "index": 44,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(44)-1)+1:MIPSAVE*VOQRSAVE(44))",
+            "description": "Wave height of swell part",
+            "unit": "UH",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "URSELL",
+            "index": 45,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(45)-1)+1:MIPSAVE*VOQRSAVE(45))",
+            "description": "Ursell number",
+            "unit": "",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "ASTD",
+            "index": 46,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(46)-1)+1:MIPSAVE*VOQRSAVE(46))",
+            "description": "Air-Sea temperature difference",
+            "unit": "K",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "TM_10",
+            "index": 47,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(47)-1)+1:MIPSAVE*VOQRSAVE(47))",
+            "description": "Average absolute wave period",
+            "unit": "UT",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "RTm_10",
+            "index": 48,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(48)-1)+1:MIPSAVE*VOQRSAVE(48))",
+            "description": "Average relative wave period",
+            "unit": "UT",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "DIFPar",
+            "index": 49,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(49)-1)+1:MIPSAVE*VOQRSAVE(49))",
+            "description": "Diffraction parameter",
+            "unit": "' '",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "TMBot",
+            "index": 50,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(50)-1)+1:MIPSAVE*VOQRSAVE(50))",
+            "description": "Near bottom wave period",
+            "unit": "UT",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "WATLEV",
+            "index": 51,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(51)-1)+1:MIPSAVE*VOQRSAVE(51))",
+            "description": "Water level",
+            "unit": "UH",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "BOTLEV",
+            "index": 52,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(52)-1)+1:MIPSAVE*VOQRSAVE(52))",
+            "description": "Bottom level",
+            "unit": "UH",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "TPsmoo",
+            "index": 53,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(53)-1)+1:MIPSAVE*VOQRSAVE(53))",
+            "description": "Relative peak period (smooth)",
+            "unit": "UT",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "SFRIC",
+            "index": 54,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(54)-1)+1:MIPSAVE*VOQRSAVE(54))",
+            "description": "Bottom friction dissipation",
+            "unit": "'m2/s'",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "SSURF",
+            "index": 55,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(55)-1)+1:MIPSAVE*VOQRSAVE(55))",
+            "description": "Surf breaking dissipation",
+            "unit": "'m2/s'",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "SWCAP",
+            "index": 56,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(56)-1)+1:MIPSAVE*VOQRSAVE(56))",
+            "description": "Whitecapping dissipation",
+            "unit": "'m2/s'",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "SVEG",
+            "index": 57,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(57)-1)+1:MIPSAVE*VOQRSAVE(57))",
+            "description": "Vegetation dissipation",
+            "unit": "'m2/s'",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "QP",
+            "index": 58,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(58)-1)+1:MIPSAVE*VOQRSAVE(58))",
+            "description": "Peakedness",
+            "unit": "",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "BFI",
+            "index": 59,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(59)-1)+1:MIPSAVE*VOQRSAVE(59))",
+            "description": "Benjamin-Feir index",
+            "unit": "",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "GENERA",
+            "index": 60,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(60)-1)+1:MIPSAVE*VOQRSAVE(60))",
+            "description": "Energy generation",
+            "unit": "m2/s",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "SWIND",
+            "index": 61,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(61)-1)+1:MIPSAVE*VOQRSAVE(61))",
+            "description": "Wind source term",
+            "unit": "m2/s",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "REDIST",
+            "index": 62,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(62)-1)+1:MIPSAVE*VOQRSAVE(62))",
+            "description": "Energy redistribution",
+            "unit": "m2/s",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "SNL4",
+            "index": 63,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(63)-1)+1:MIPSAVE*VOQRSAVE(63))",
+            "description": "Total absolute 4-wave interaction",
+            "unit": "m2/s",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "SNL3",
+            "index": 64,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(64)-1)+1:MIPSAVE*VOQRSAVE(64))",
+            "description": "Total absolute 3-wave interaction",
+            "unit": "m2/s",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "PROPAG",
+            "index": 65,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(65)-1)+1:MIPSAVE*VOQRSAVE(65))",
+            "description": "Energy propagation",
+            "unit": "m2/s",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "PROPXY",
+            "index": 66,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(66)-1)+1:MIPSAVE*VOQRSAVE(66))",
+            "description": "xy-propagation",
+            "unit": "m2/s",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "PROPTH",
+            "index": 67,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(67)-1)+1:MIPSAVE*VOQRSAVE(67))",
+            "description": "theta-propagation",
+            "unit": "m2/s",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "PROPSI",
+            "index": 68,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(68)-1)+1:MIPSAVE*VOQRSAVE(68))",
+            "description": "sigma-propagation",
+            "unit": "m2/s",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "RADSTR",
+            "index": 69,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(69)-1)+1:MIPSAVE*VOQRSAVE(69))",
+            "description": "Radiation stress",
+            "unit": "m2/s",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "NPLANT",
+            "index": 70,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(70)-1)+1:MIPSAVE*VOQRSAVE(70))",
+            "description": "Plants per m2",
+            "unit": "1/m2",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        },
+        {
+            "name": "LWAVP",
+            "index": 71,
+            "internal": "VOQSAVE(MIPSAVE*(VOQRSAVE(71)-1)+1:MIPSAVE*VOQRSAVE(71))",
+            "description": "Peak wave length",
+            "unit": "UL",
+            "type": "float",
+            "shape": ["MIPSAVE"]
+        }
+
+    ]
+}
