@@ -2,8 +2,9 @@
 bin_PROGRAMS=chenopis\
 	hcat \
 	unhcat
+lib_LTLIBRARIES=libchenopis.la
 
-chenopis_SOURCES=\
+libchenopis_la_SOURCES=\
 	swmod1.F \
 	swmod2.F \
 	m_constants.F90 \
@@ -18,7 +19,6 @@ chenopis_SOURCES=\
 	SwanGriddata.F90 \
 	SwanGridobjects.F90 \
 	SwanCompdata.F90 \
-	swanmain.F \
 	swanpre1.F \
 	swanpre2.F \
 	swanout1.F \
@@ -70,6 +70,14 @@ chenopis_SOURCES=\
 	ocpids.F \
 	ocpcre.F \
 	ocpmix.F
+
+# Add the library
+chenopis_LDADD=\
+	libchenopis.la
+
+chenopis_SOURCES=\
+	swanmain.F
+
 
 hcat_SOURCES=swanhcat.F
 hcat_DIST=hcat.nml

@@ -31,6 +31,13 @@ AC_FC_SRCEXT([F90])
 # Checks for typedefs, structures, and compiler characteristics.
 
 # Checks for library functions.
+## ----------------------- ##
+## Libtool initialisation. ##
+## ----------------------- ##
+LT_PREREQ(2.4)
+LT_INIT
+
+
 
 AC_CONFIG_FILES([
         Makefile
