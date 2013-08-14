@@ -1,0 +1,25 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "swan_dll", "swan_dll.vfproj", "{C630D8AE-E062-4F19-A9DC-425E2B34F5CC}"
+EndProject
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "swan_exe", "swan_exe.vfproj", "{A3BBC00A-622D-4E46-84BD-ABC099E7DA10}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C630D8AE-E062-4F19-A9DC-425E2B34F5CC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C630D8AE-E062-4F19-A9DC-425E2B34F5CC}.Debug|Win32.Build.0 = Debug|Win32
+		{C630D8AE-E062-4F19-A9DC-425E2B34F5CC}.Release|Win32.ActiveCfg = Release|Win32
+		{C630D8AE-E062-4F19-A9DC-425E2B34F5CC}.Release|Win32.Build.0 = Release|Win32
+		{A3BBC00A-622D-4E46-84BD-ABC099E7DA10}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A3BBC00A-622D-4E46-84BD-ABC099E7DA10}.Debug|Win32.Build.0 = Debug|Win32
+		{A3BBC00A-622D-4E46-84BD-ABC099E7DA10}.Release|Win32.ActiveCfg = Release|Win32
+		{A3BBC00A-622D-4E46-84BD-ABC099E7DA10}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
