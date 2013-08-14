@@ -52,6 +52,12 @@ Makefile.in
 *.out
 *.app
 
+# Tar files
+*.tar.gz
+*.tar.bz2
+
+
+# emacs stuff
 *~
 \#*\#
 /.emacs.desktop
