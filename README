@@ -1,3 +1,9 @@
+Chenopis
+-------------------------------------
+This is a maintenance branch of SWAN.
+The following changes were made:
+    - Use to cpp/fpp preprocessing (for debugging purposes, editable source files)
+    - Use autotools for compilation (find settings, build tar, tags, etc..)
 
 Instructions for running a SWAN model
 -------------------------------------
