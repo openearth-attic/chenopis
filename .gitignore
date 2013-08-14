@@ -12,6 +12,10 @@ Makefile.in
 /install-sh
 /missing
 
+# Fortran modules
+
+*.mod
+
 # Object files
 *.o
 
