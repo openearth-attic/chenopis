@@ -11,9 +11,9 @@ module swanbmi
   ! We can't return an array of pointers with an undertimened length so
   ! we fix it to something, in this case 100.
 
-  integer(c_int) :: MAXNAMES = 100
-  integer(c_int) :: MAXDIMS = 6
-  integer(c_int) :: MAXSTRINGLEN = 1024
+  integer(c_int), bind(C, name="MAXNAMES") :: MAXNAMES = 100
+  integer(c_int), bind(C, name="MAXDIMS") :: MAXDIMS = 6
+  integer(c_int), bind(C, name="MAXSTRINGLEN") :: MAXSTRINGLEN = 1024
 
 
   ! TODO get rid of this at a module level....
@@ -387,7 +387,8 @@ contains
 
   subroutine finalize() bind(C, name="finalize")
     !DEC$ ATTRIBUTES DLLEXPORT :: finalize
-
+    use swanapi, only : swfinalize
+    call swfinalize()
   end subroutine finalize
 
   subroutine get_n_attributes(n) bind(C, name="get_n_attributes")
