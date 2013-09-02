@@ -1760,6 +1760,7 @@
       USE OCPCOMM4                                                        40.41
       USE SWCOMM2                                                         40.41
       USE SWCOMM3                                                         40.41
+      USE SWANAPI, ONLY : SVALQI
 !
 !
 !   --|-----------------------------------------------------------|--
@@ -5969,3 +5970,5 @@
       RETURN
 !     end of subroutine RETSTP
       END
+
+

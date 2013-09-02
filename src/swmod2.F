@@ -746,18 +746,18 @@
 !     XYTST : Grid point indices of test points
 !     YCGRID: Coordinates of computational grid in y-direction
 
-      INTEGER, SAVE, ALLOCATABLE :: KGRPNT(:,:), KGRBND(:)
-      INTEGER, SAVE, ALLOCATABLE :: XYTST(:)
-      REAL   , SAVE, ALLOCATABLE :: AC2(:,:,:)
-      REAL   , SAVE, ALLOCATABLE :: XCGRID(:,:), YCGRID(:,:)
-      REAL   , SAVE, ALLOCATABLE :: SPCSIG(:)  , SPCDIR(:,:)
-      REAL   , SAVE, ALLOCATABLE :: DEPTH(:) , FRIC(:)
-      REAL   , SAVE, ALLOCATABLE :: UXB(:)   , UYB(:)
-      REAL   , SAVE, ALLOCATABLE :: WXI(:)   , WYI(:)
-      REAL   , SAVE, ALLOCATABLE :: WLEVL(:) , ASTDF(:)
-      REAL   , SAVE, ALLOCATABLE :: NPLAF(:)
-      REAL   , SAVE, ALLOCATABLE :: LAYH(:), VEGDIL(:), VEGDRL(:),
-     &                              VEGNSL(:)
+      INTEGER, SAVE, TARGET, ALLOCATABLE :: KGRPNT(:,:), KGRBND(:)
+      INTEGER, SAVE, TARGET, ALLOCATABLE :: XYTST(:)
+      REAL   , SAVE, TARGET, ALLOCATABLE :: AC2(:,:,:)
+      REAL   , SAVE, TARGET, ALLOCATABLE :: XCGRID(:,:), YCGRID(:,:)
+      REAL   , SAVE, TARGET, ALLOCATABLE :: SPCSIG(:)  , SPCDIR(:,:)
+      REAL   , SAVE, TARGET, ALLOCATABLE :: DEPTH(:) , FRIC(:)
+      REAL   , SAVE, TARGET, ALLOCATABLE :: UXB(:)   , UYB(:)
+      REAL   , SAVE, TARGET, ALLOCATABLE :: WXI(:)   , WYI(:)
+      REAL   , SAVE, TARGET, ALLOCATABLE :: WLEVL(:) , ASTDF(:)
+      REAL   , SAVE, TARGET, ALLOCATABLE :: NPLAF(:)
+      REAL   , SAVE, TARGET, ALLOCATABLE :: LAYH(:), VEGDIL(:)
+      REAL   , SAVE, TARGET, ALLOCATABLE :: VEGDRL(:), VEGNSL(:)
 
 !  8. Subroutines and functions used
 !

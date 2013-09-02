@@ -2445,6 +2445,21 @@
       RETURN
 ! * end of subroutine SWINIT *
       END
+
+
+      SUBROUTINE SWFINALIZE()
+      USE M_SNL4
+      IMPLICIT NONE
+! * end of subroutine SWFINALIZE
+      ! Deallocate everything allocated in init
+      IF (ALLOCATED(LAMBDA)) DEALLOCATE(LAMBDA)
+      IF (ALLOCATED(CNL4_1)) DEALLOCATE(CNL4_1)
+      IF (ALLOCATED(CNL4_2)) DEALLOCATE(CNL4_2)
+
+      call ocpfinalize()
+      END
+
+
 !
 !***********************************************************************
 !                                                                      *
@@ -2940,7 +2955,6 @@
 ! 13. Source text
 !
       INTEGER  KGRPNT(MXC,MYC)                                            40.02
-      LOGICAL  SINBTG
       CHARACTER STYPE *1
       TYPE(OPSDAT), POINTER :: CUOPS                                      40.31
       SAVE IENT
@@ -4121,7 +4135,6 @@
 !
 !     SINBTG, SINCMP (both SWAN/SER) and MSGERR (Ocean Pack)
 !
-      LOGICAL SINBTG, SINCMP
 !
 !  7. ERROR MESSAGES
 !
@@ -6689,7 +6702,7 @@
 !     IX         index in x-dir of comput grid point
 !     IY         index in y-dir of comput grid point
 !
-      REAL       SVALQI
+
 !     SVALQI     real function giving interpolated value of an input array
 !
       REAL       TIMR1, XP, YP, UU, VV, VTOT, W1, W3,

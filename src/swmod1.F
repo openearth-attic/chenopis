@@ -1,6 +1,7 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
 !                 COMMON VARIABLES RELATED MODULES, file 1 of 3
 !
 !     Contents of this file
@@ -1963,7 +1964,8 @@
 !
       REAL CASTD,       CDCAP
       REAL DEGRAD,      DNORTH,      GRAV,        PI
-      REAL PI2,         PWTAIL(10),  RHO,         WLEV
+      REAL PI2,  RHO,         WLEV
+      REAL, DIMENSION(10), TARGET :: PWTAIL
 !
 !     *** information related to the numerical scheme ***
 !

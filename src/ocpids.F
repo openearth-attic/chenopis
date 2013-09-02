@@ -323,6 +323,7 @@
           &        SHARED,                                                     40.41
 #endif
      &        ERR=910)                                                    40.41
+
         CALL RDINIT
       ENDIF
 !
@@ -358,6 +359,25 @@
       RETURN                                                              34.01
 !
       END
+
+
+      subroutine ocpfinalize()
+      use ocpcomm4
+      implicit none
+      logical :: opened
+      integer :: i
+      integer, dimension(4) :: indices
+      indices=(/11,12, printf, inputf/)
+      ! close all files opened by OCPFINIT
+      ! 11, 12, printf, inputf
+      do i=1,4
+         inquire(indices(i), opened=opened)
+         if (opened) close(indices(i))
+      end do
+
+
+      END
+
 !*****************************************************************
 !                                                                *
       SUBROUTINE OCDTIM (PRCTIM)

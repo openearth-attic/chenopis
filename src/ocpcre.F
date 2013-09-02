@@ -100,6 +100,7 @@
 !
       SAVE IENT
       DATA IENT/0/
+      REWIND(INPUTF)
       CALL STRACE (IENT,'RDINIT')
       KAR = ';'
       KARNR = LINELN + 1                                                  40.00
