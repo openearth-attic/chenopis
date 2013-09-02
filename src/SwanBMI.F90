@@ -13,7 +13,7 @@ module swanbmi
 
   integer(c_int), bind(C, name="MAXNAMES") :: MAXNAMES = 100
   integer(c_int), bind(C, name="MAXDIMS") :: MAXDIMS = 6
-  integer(c_int), bind(C, name="MAXSTRINGLEN") :: MAXSTRINGLEN = 1024
+  integer(c_int), bind(C, name="MAXSTRLEN") :: MAXSTRLEN = 1024
 
 
   ! TODO get rid of this at a module level....
@@ -71,7 +71,7 @@ contains
 
 
     ! The c name of the configuration file
-    character(kind=c_char), intent(in) :: c_config_file(MAXSTRINGLEN)
+    character(kind=c_char), intent(in) :: c_config_file(MAXSTRLEN)
     ! The fortran name of the configuration file
     character(len=strlen(c_config_file)) :: config_file
 
@@ -264,7 +264,6 @@ contains
 
 
 
-    write(*,*) LEVERR, MAXERR
     IF (LEVERR.GT.MAXERR) THEN
        WRITE (PRINTF, 6030) LEVERR
        IF (LEVERR.LT.4) WRITE (PRINTF, 6011)
@@ -402,8 +401,8 @@ contains
   subroutine get_attribute_name(i, c_att_name) bind(C, name="get_attribute_name")
     use iso_c_binding, only: c_char, c_ptr, c_loc, c_int, c_null_char
     integer(c_int), intent(in) :: i
-    character(kind=c_char), intent(out) :: c_att_name(MAXSTRINGLEN)
-    character(len=MAXSTRINGLEN) :: name
+    character(kind=c_char), intent(out) :: c_att_name(MAXSTRLEN)
+    character(len=MAXSTRLEN) :: name
 
     select case(i)
        ! From SWANCOM1
@@ -457,7 +456,7 @@ contains
   subroutine get_attribute_type(c_att_name, c_type) bind(C, name="get_attribute_type")
     use iso_c_binding, only: c_char, c_ptr, c_null_char
     character(kind=c_char), intent(in) :: c_att_name(*)
-    character(kind=c_char), intent(out) :: c_type(MAXSTRINGLEN)
+    character(kind=c_char), intent(out) :: c_type(MAXSTRLEN)
     ! Use one of the following types
     ! BMI datatype        C datatype        NumPy datatype
     ! BMI_STRING          char*             S<
@@ -466,7 +465,7 @@ contains
 
     ! The fortran name of the attribute name
     character(len=strlen(c_att_name)) :: att_name
-    character(len=MAXSTRINGLEN) :: type
+    character(len=MAXSTRLEN) :: type
     ! Store the name
     att_name = char_array_to_string(c_att_name, strlen(c_att_name))
 
@@ -519,11 +518,11 @@ contains
   subroutine get_string_attribute(c_att_name, c_value)  bind(C, name="get_string_attribute")
     use iso_c_binding, only: c_char
     character(kind=c_char), intent(in) :: c_att_name(*)
-    character(kind=c_char), intent(out) :: c_value(MAXSTRINGLEN)
+    character(kind=c_char), intent(out) :: c_value(MAXSTRLEN)
 
     ! The fortran name of the attribute name
     character(len=strlen(c_att_name)) :: att_name
-    character(len=MAXSTRINGLEN) :: value
+    character(len=MAXSTRLEN) :: value
     ! Store the name
     att_name = char_array_to_string(c_att_name, strlen(c_att_name))
 
@@ -547,8 +546,8 @@ contains
     use iso_c_binding, only: c_char, c_ptr, c_loc, c_int, c_null_char
 
     integer(c_int), intent(in) :: i
-    character(kind=c_char), intent(out) :: c_var_name(MAXSTRINGLEN)
-    character(len=MAXSTRINGLEN) :: name
+    character(kind=c_char), intent(out) :: c_var_name(MAXSTRLEN)
+    character(len=MAXSTRLEN) :: name
 
     include "bmi_var_name.inc"
 
@@ -621,7 +620,7 @@ contains
     use swcomm1
 
     character(kind=c_char), intent(in) :: c_var_name(*)
-    character(kind=c_char), intent(out) :: c_type_name(MAXSTRINGLEN)
+    character(kind=c_char), intent(out) :: c_type_name(MAXSTRLEN)
     ! Use one of the following types
     ! BMI datatype        C datatype        NumPy datatype
     ! BMI_STRING          char*             S<
@@ -633,8 +632,8 @@ contains
 
     integer(c_int) :: i
     integer :: typeid
-    character(len=MAXSTRINGLEN) :: type_name
-    character(len=MAXSTRINGLEN) :: var_name
+    character(len=MAXSTRLEN) :: type_name
+    character(len=MAXSTRLEN) :: var_name
 
     var_name = char_array_to_string(c_var_name, strlen(c_var_name))
 
@@ -656,11 +655,11 @@ contains
   subroutine get_var_unit( c_var_name, c_unit )  bind(C, name="get_var_unit")
     use swcomm1
     character(kind=c_char), intent(in) :: c_var_name(*)
-    character(kind=c_char), intent(out) :: c_unit(MAXSTRINGLEN)
+    character(kind=c_char), intent(out) :: c_unit(MAXSTRLEN)
 
     integer(c_int) :: i
     integer :: typeid
-    character(len=MAXSTRINGLEN) :: unit
+    character(len=MAXSTRLEN) :: unit
 
     ! The fortran name of the attribute name
     character(len=strlen(c_var_name)) :: var_name
@@ -1033,8 +1032,8 @@ contains
 
   subroutine get_time_units(c_unit)  bind(C, name="get_time_units")
     ! returns unit string for model time, e.g. ‘days since 1970-01-01'
-    character(kind=c_char), intent(out) :: c_unit(MAXSTRINGLEN)
-    character(len=MAXSTRINGLEN) :: unit
+    character(kind=c_char), intent(out) :: c_unit(MAXSTRLEN)
+    character(len=MAXSTRLEN) :: unit
 
     unit = 'days since 1970-01-01 00:00'
     c_unit = string_to_char_array(trim(unit), len(trim(unit)))
@@ -1066,7 +1065,7 @@ contains
   ! Utility functions, move these to interop module
   ! Make functions pure so they can be used as input arguments.
   integer(c_int) pure function strlen(char_array)
-    character(c_char), intent(in) :: char_array(MAXSTRINGLEN)
+    character(c_char), intent(in) :: char_array(MAXSTRLEN)
     integer :: inull, i
     strlen = 0
     do i = 1, size(char_array)

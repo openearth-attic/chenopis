@@ -923,8 +923,7 @@
       SAVE IENT
       DATA IENT /0/
       CALL STRACE (IENT, 'INAR2D')
-      CALL BACKTRACE
- 999  IF (NDSD.LT.0) RETURN                                               40.00
+ 999  IF (NDSD.LT.1) RETURN                                               40.00
 !     no reading from file due to open error
 !
 !     *** NUMFIL is the number of that is open in one time step  **
