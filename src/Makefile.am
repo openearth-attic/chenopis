@@ -72,27 +72,27 @@ libchenopis_la_SOURCES=\
 	swanpre1.F \
 	swanpre2.F
 
+BMIINCLUDES=\
+	bmi_get_nd.inc \
+	bmi_nvar.inc \
+	bmi_set_nd.inc \
+	bmi_type.inc \
+	bmi_var_name.inc \
+	bmi_module.inc \
+	bmi_rank.inc \
+	bmi_shape.inc \
+	bmi_unit.inc
 
 if HAVE_BMI
 libchenopis_la_SOURCES+=\
-	SwanBMI.F90 \
-	SwanFields.F90
+	SwanFields.F90 \
+	SwanBMI.F90
 endif
-
-BMIINCLUDES=\
-	bmi_get_nd.inc\
-	bmi_nvar.inc\
-	bmi_set_nd.inc\
-	bmi_type.inc\
-	bmi_var_name.inc\
-	bmi_module.inc\
-	bmi_rank.inc\
-	bmi_shape.inc\
-	bmi_unit.inc
 
 SwanBMI.F90: $(BMIINCLUDES)
 
-SwanBMI.F90: variables.json $(top_srcdir)/scripts/codegen.py
+# depends on all these files... somehow it's not updating on include file changes...
+$(BMIINCLUDES): variables.json $(top_srcdir)/scripts/codegen.py
 	python $(top_srcdir)/scripts/codegen.py
 
 libchenopis_la_DIST=variables.json

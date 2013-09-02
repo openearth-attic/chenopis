@@ -68,7 +68,7 @@ contains
     use ocpcomm4
     use SwanGriddata
     use swanapi, only : swinit, swprep,swinco, errchk,swrbc
-
+    use SwanFields
 
     ! The c name of the configuration file
     character(kind=c_char), intent(in) :: c_config_file(MAXSTRLEN)
@@ -235,6 +235,9 @@ contains
 
     CALL SWSYNC
     IF (STPNOW()) RETURN
+
+    call field_init()
+    call field_update(compda)
   end subroutine initialize
 
   subroutine update(delta_t) bind(C, name="update")
@@ -254,6 +257,7 @@ contains
     USE M_GENARR
     USE M_PARALL
     USE SwanGriddata
+    use SwanFields
 
     real(c_double), intent(in) :: delta_t
 
@@ -376,6 +380,7 @@ contains
        IT = IT + 1
     ENDIF
 
+    call field_update(compda)
 
   end subroutine update
 
@@ -386,8 +391,14 @@ contains
 
   subroutine finalize() bind(C, name="finalize")
     !DEC$ ATTRIBUTES DLLEXPORT :: finalize
+    use SwanFields
     use swanapi, only : swfinalize
+
+    implicit none
+
+    call field_finalize()
     call swfinalize()
+
   end subroutine finalize
 
   subroutine get_n_attributes(n) bind(C, name="get_n_attributes")
@@ -462,6 +473,7 @@ contains
     ! BMI_STRING          char*             S<
     ! BMI_INT             int               int16
     ! BMI_DOUBLE          double            float64
+    !                     bool              bool
 
     ! The fortran name of the attribute name
     character(len=strlen(c_att_name)) :: att_name
@@ -710,6 +722,10 @@ contains
     real(c_float), allocatable, save, target  :: x_1d_float_ptr(:)
     real(c_float), allocatable, save, target  :: x_2d_float_ptr(:,:)
     real(c_float), allocatable, save, target  :: x_3d_float_ptr(:,:,:)
+    logical(c_bool), save, target  :: x_0d_bool_ptr
+    logical(c_bool), allocatable, save, target  :: x_1d_bool_ptr(:)
+    logical(c_bool), allocatable, save, target  :: x_2d_bool_ptr(:,:)
+    logical(c_bool), allocatable, save, target  :: x_3d_bool_ptr(:,:,:)
 
     character(kind=c_char), intent(in) :: c_var_name(*)
     type(c_ptr), intent(inout) :: x
@@ -892,6 +908,25 @@ contains
     end select
   end subroutine get_3d_float
 
+  subroutine get_2d_bool(c_var_name, x) bind(C, name="get_2d_bool")
+    !DEC$ ATTRIBUTES DLLEXPORT :: get_2d_bool
+
+    use iso_c_binding, only: c_bool, c_char, c_loc
+
+    character(kind=c_char), intent(in) :: c_var_name(*)
+    type(c_ptr), intent(inout) :: x
+
+    ! The fortran name of the attribute name
+    character(len=strlen(c_var_name)) :: var_name
+    ! Store the name
+    var_name = char_array_to_string(c_var_name, strlen(c_var_name))
+
+    select case(var_name)
+    case default
+       call get_var(c_var_name, x)
+    end select
+  end subroutine get_2d_bool
+
 
   subroutine set_1d_float(c_var_name, x) bind(C, name="set_1d_float")
     !DEC$ ATTRIBUTES DLLEXPORT :: set_1d_float
@@ -1007,6 +1042,11 @@ contains
     real(c_float), pointer  :: x_1d_float_ptr(:)
     real(c_float), pointer  :: x_2d_float_ptr(:,:)
     real(c_float), pointer  :: x_3d_float_ptr(:,:,:)
+    logical(c_bool), pointer :: x_0d_bool_ptr
+    logical(c_bool), pointer :: x_1d_bool_ptr(:)
+    logical(c_bool), pointer :: x_2d_bool_ptr(:,:)
+    logical(c_bool), pointer :: x_3d_bool_ptr(:,:,:)
+
     ! The fortran name of the attribute name
     character(len=strlen(c_var_name)) :: var_name
     ! Store the name

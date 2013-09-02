@@ -9,7 +9,7 @@
         "use": true
     },
     "comment": "in swan most variables are stored in the global compda structure",
-    "modules": ["swcomm3", "swcomm1", "m_genarr", "outp_data"],
+    "modules": ["swcomm3", "swcomm1", "m_genarr", "outp_data", "swanfields"],
     "dimensions":
     {
         "MDC": "Maximum counter of directional distribution in computational model (2PI / DDIR + 1)",
@@ -344,6 +344,27 @@
             "type": "float",
             "shape": ["10"],
             "long_name": "",
+            "pointer": true
+        },
+        {
+            "name": "landmask",
+            "type": "bool",
+            "shape": ["MXC","MYC"],
+            "long_name": "",
+            "pointer": true
+        },
+        {
+            "name": "tpsmooth",
+            "type": "float",
+            "shape": ["MCGRD"],
+            "long_name": "",
+            "pointer": true
+        },
+        {
+            "name": "ubotout",
+            "type": "float",
+            "shape": ["MCGRD"],
+            "long_name": "ubot as computed in output (sqrt(2)*ubot))",
             "pointer": true
         }
 

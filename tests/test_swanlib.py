@@ -79,6 +79,8 @@ class SwanBMI(unittest.TestCase):
         self.swan.update(0.1)
     def test_3d_float(self):
         x = self.swan.get_nd('AC2')
+    def test_2d_bool(self):
+        x = self.swan.get_nd('landmask')
 
 if __name__=='__main__':
     unittest.main()
