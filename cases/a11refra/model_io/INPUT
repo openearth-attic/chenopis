@@ -1,0 +1,38 @@
+$*************HEADING****************************************
+$
+PROJ 'A11ref01' 'A11'
+$
+$ PURPOSE OF TEST: Test of the refraction formulation
+$
+$ --|--------------------------------------------------------------|--
+$   | This SWAN input file is part of the bench mark tests for     |
+$   | SWAN. More information about this test can be found in       |
+$   | an accompanied document.                                     |
+$ --|--------------------------------------------------------------|--
+$
+$***********MODEL INPUT********************************** ***
+$
+CGRID 0. 0. 0. 20000. 4000. 25 100 SECTOR 80. 130. 100 0.05 0.25 40
+$
+INPGRID BOTTOM 0. 0. 0. 1 1 20000. 4000.
+READINP BOTTOM 1. 'a11refr.bot'  1 0 FREE
+$
+BOUN SHAPE GAUSS 0.01 PEAK DSPR POWER
+BOUN SIDE S CCW CON PAR 1. 10. 120. 500.
+$
+OFF QUAD
+OFF BREA
+OFF WCAP
+$
+$************ OUTPUT REQUESTS *************************
+$
+CURVE  'LINE1' 10000. 0.  100  10000. 4000.
+TABLE  'LINE1' HEAD                  DIST DEP HS RTP TM01 TM02 FSPR DIR SETUP   
+TABLE  'LINE1' HEAD   'a11ref01.tab' DIST DEP HS RTP TM01 TM02 FSPR DIR SETUP
+$
+POINTS 'POINT' FILE   'a11refr.loc'
+SPEC   'POINT' SPEC1D 'a11ref01.spc'
+TABLE  'POINT' HEAD   'a11ref01.tbl' HS RTP TM01 TM02 FSPR
+$
+COMPUTE
+STOP

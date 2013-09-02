@@ -1,0 +1,60 @@
+#    Information in this file is related to bottom, current and wind files 
+#    available in the Virtual Testbed. Without this information unambiguous
+#    interpretation of the available files in the Testbed is often not 
+#    possible.If any of these files is not available the file-info table
+#    is replaced by NA (not available). The definition of the variables
+#    used here, are given at the end of this file.
+
+#----Bottom file info
+ fac     name            idla     header    format         
+  1.     'a11refr.bot'    1       0         FREE
+ x0       y0       Alpha      Mx      My       Dx        Dy 
+  0.        0.       0.       1       1        20000.    4000.
+
+#----Water level file info
+ fac     name            idla     header    format         
+ NA      NA              NA       NA        NA
+ x0       y0       Alpha      Mx      My       Dx        Dy 
+ NA      NA        NA         NA      NA       NA        NA
+
+#----Current file info
+ fac     name            idla     header    format         
+ NA      NA              NA       NA        NA
+ x0       y0       Alpha      Mx      My       Dx        Dy 
+ NA      NA        NA         NA      NA       NA        NA
+
+#----Wind file info
+ fac     name            idla     header    format         
+ NA      NA              NA       NA        NA
+ x0       y0       Alpha      Mx      My       Dx        Dy 
+ NA      NA        NA         NA      NA       NA        NA
+#
+#----Boundary file info
+#    This file is available in a fixed format
+#
+#------------------------------------------------------------------------------
+#
+#    General definitions of used items and references are given in the following table.
+#------------------------------------------------------------------------------
+Item:       Definition:
+
+fac         Factor multiplying data values in file
+name        Filename in data_in
+idla        File read convention
+header      Number of header lines
+format      Fortran Standard
+
+x0          Geographical location of x-coordinate (in m) of origin of computational grid
+            in the problem coordinate system.
+y0          Geographical location of y-coordinate (in m) of origin of computational grid
+            in the problem coordinate system.
+Alpha       Direction of positive x-axis
+Mx          Number of meshes in x-direction. One less than the number of grid points
+My          Number of meshes in y-direction. One less than the number of grid points
+Dx          Step size of grid in X- direction (in m)
+Dy          Step size of grid in Y- direction (in m)
+#------------------------------------------------------------------------------
+#
+
+
+
