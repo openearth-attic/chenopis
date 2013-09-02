@@ -361,10 +361,38 @@
             "pointer": true
         },
         {
-            "name": "ubotout",
+            "name": "ubot",
             "type": "float",
             "shape": ["MCGRD"],
-            "long_name": "ubot as computed in output (sqrt(2)*ubot))",
+            "long_name": "ubot as computed in output (sqrt(2)*ubot)",
+            "pointer": true
+        },
+        {
+            "name": "hsig",
+            "type": "float",
+            "shape": ["MCGRD"],
+            "long_name": "hsig as computed in output",
+            "pointer": true
+        },
+        {
+            "name": "dep",
+            "type": "float",
+            "shape": ["MCGRD"],
+            "long_name": "dep as computed in output",
+            "pointer": true
+        },
+        {
+            "name": "k",
+            "type": "float",
+            "shape": ["MSC","MCGRD"],
+            "long_name": "wave number as computed in output",
+            "pointer": true
+        },
+        {
+            "name": "cg",
+            "type": "float",
+            "shape": ["MSC","MCGRD"],
+            "long_name": "group velocity as computed in output",
             "pointer": true
         }
 

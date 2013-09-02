@@ -24,20 +24,35 @@ module SwanFields
   logical(c_bool), allocatable, target, save :: landmask(:,:) ! Land landmask (0=land, 1=sea)
   real(c_float), allocatable, target, save :: tpsmooth(:)
   real(c_float), allocatable, target, save :: ubot(:)
+  real(c_float), allocatable, target, save :: hsig(:)
+  real(c_float), allocatable, target, save :: dep(:)
+  real(c_float), allocatable, target, save :: k(:,:)
+  real(c_float), allocatable, target, save :: cg(:,:)
+  real(c_float), allocatable, target, save :: n(:,:)
+  real(c_float), allocatable, target, save :: nd(:,:)
   logical(c_bool), parameter :: land =.false., sea=.true.
+
+  ! not in a module....
+  real, external ::  SwanIntgratSpc
 
   !   ---
   !
-  !   Source text
+  !   source text
   !
 
 contains
   subroutine field_init()
     ! TODO? do something with mxcgl, mycgl, iode to compute local bounds
 
-    allocate(landmask(mxc,myc))
-    allocate(tpsmooth(mcgrd))
-    allocate(ubot(mcgrd))
+    allocate(landmask(mxc,myc)) ! landmask
+    allocate(tpsmooth(mcgrd)) ! peak period
+    allocate(ubot(mcgrd)) ! orbital velocity
+    allocate(hsig(mcgrd)) ! significant wave height
+    allocate(dep(mcgrd)) ! depth
+    allocate(k(msc,mcgrd)) ! wave number
+    allocate(cg(msc,mcgrd)) ! group velocity
+    allocate(n(msc,mcgrd)) ! ratio of group and phase velocity
+    allocate(nd(msc,mcgrd)) ! derivative of N with respect to D
 
   end subroutine field_init
 
@@ -50,9 +65,85 @@ contains
   subroutine field_update(compda)
     real, intent(in) :: compda(mcgrd,mcmvar)
     ! Update module variables
+    call make_dep(compda) ! needed for make_k
+    call make_k_and_cg_and_n_and_nd(compda)
     call make_landmask(compda)
     call make_tpsmooth(compda)
+    call make_ubot(compda)
+    call make_hsig(compda)
+
   end subroutine field_update
+
+  subroutine make_dep(compda)
+    implicit none
+    real, intent(in) :: compda(mcgrd,mcmvar)
+
+    dep = compda(1,jdp2)
+  end subroutine make_dep
+
+  subroutine make_k_and_cg_and_n_and_nd(compda)
+
+    implicit none
+    real, intent(in) :: compda(mcgrd,mcmvar)
+
+    integer :: ip
+    ! variables
+    ! mmt, sig, d, k, cg, n, nd
+    ! int:: mmt
+    ! real:: sig(mmt), d, k(mmt), cg(mmt), n(mmt), nd(mmt)
+    ! intent::  in, in, in, out, out, out, out, out
+
+    do ip=1,mcgrd
+       call kscip1 (msc, spcsig, dep(ip), k(:,ip), cg(:,ip), n(:,ip), nd(:,ip))
+    end do
+
+  end subroutine make_k_and_cg_and_n_and_nd
+
+  subroutine make_hsig(compda)
+    implicit none
+    real, intent(in) :: compda(mcgrd,mcmvar)
+    real :: ds ! delta spectrum
+    real :: ead ! energy per bin, per point, per direction
+    real :: ehfr, etot, eftail, ecs
+    real :: fmin, fmax
+    integer :: ip, id, is
+
+
+    eftail = 1. / (pwtail(1) - 1.)
+
+    do ip=1,mcgrd
+       if (outpar(6).eq.0.) then
+          ! integration over [0,inf]
+          etot = 0.
+          ! trapezoidal rule is applied
+          do id=1, mdc
+             do is=2,msc
+                ds = spcsig(is)-spcsig(is-1)
+                ead = 0.5*(spcsig(is)*ac2(id,is,ip)+ spcsig(is-1)*ac2(id,is-1,ip))*ds*ddir
+                etot = etot + ead
+             enddo
+             if (msc .gt. 3) then
+                ! contribution of tail to total energy density
+                ehfr = ac2(id,msc,ip) * spcsig(msc)
+                etot = etot + ddir * ehfr * spcsig(msc) * eftail
+             endif
+          enddo
+       else
+          ! integration over [fmin,fmax]
+          fmin = pi2*outpar(21)
+          fmax = pi2*outpar(36)
+          ecs  = 1.
+          etot = SwanIntgratSpc(0., fmin, fmax, spcsig, spcdir(1,1), k(:,ip), ecs, 0., 0., ac2(:,:,ip), 1)
+       endif
+
+       if (etot .ge. 0.) then
+          hsig(ip) = 4.*sqrt(etot)
+       else
+          hsig(ip) = 0.
+       endif
+    end do
+
+  end subroutine make_hsig
 
   subroutine make_ubot(compda)
 
