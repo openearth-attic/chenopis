@@ -181,7 +181,3 @@ for include in templates.keys():
     with open(outfilename, "w") as outfile:
         rendered = Template(templates[include]).render(vars=vars, modules=modules)
         outfile.write(rendered)
-        print("!"*50)
-        print(include)
-        print("!"*50)
-        print(rendered)

@@ -1,0 +1,4 @@
+TESTS=test_swanlib.py
+TEST_EXTENSIONS = .py
+PY_LOG_COMPILER = $(PYTHON)
+AM_PY_LOG_FLAGS = -v
