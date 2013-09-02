@@ -19,8 +19,6 @@ libchenopis_la_SOURCES=\
 	SwanGriddata.F90 \
 	SwanGridobjects.F90 \
 	SwanCompdata.F90 \
-	swanpre1.F \
-	swanpre2.F \
 	swanout1.F \
 	swanout2.F \
 	swanser.F \
@@ -70,10 +68,15 @@ libchenopis_la_SOURCES=\
 	ocpids.F \
 	ocpcre.F \
 	ocpmix.F \
-	swanapi.F
+	swanapi.F \
+	swanpre1.F \
+	swanpre2.F
+
 
 if HAVE_BMI
-	libchenopis_la_SOURCES+=SwanBMI.F90
+libchenopis_la_SOURCES+=\
+	SwanBMI.F90 \
+	SwanFields.F90
 endif
 
 BMIINCLUDES=\
@@ -89,7 +92,7 @@ BMIINCLUDES=\
 
 SwanBMI.F90: $(BMIINCLUDES)
 
-$(BMIINCLUDES): variables.json
+SwanBMI.F90: variables.json $(top_srcdir)/scripts/codegen.py
 	python $(top_srcdir)/scripts/codegen.py
 
 libchenopis_la_DIST=variables.json

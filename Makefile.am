@@ -1,4 +1,4 @@
-SUBDIRS=src
+SUBDIRS=src tests
 EXTRA_DIST = \
 	m4 \
 	autogen.sh \

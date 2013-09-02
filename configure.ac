@@ -33,7 +33,7 @@ AC_FC_SRCEXT([F90])
 # Checks for library functions.
 
 # Check for features
-AC_ARG_WITH(bmi,[AS_HELP_STRING([--with-bmi],[Build with bmi support @<:@default=no@:>@])], [],[with_bmi=no])
+AC_ARG_WITH(bmi,[AS_HELP_STRING([--with-bmi],[Build with bmi support @<:@default=no@:>@])], [],[with_bmi=yes])
 AM_CONDITIONAL([HAVE_BMI], test "x$with_bmi" != "xno")
 
 ## ----------------------- ##
@@ -47,5 +47,6 @@ LT_INIT
 AC_CONFIG_FILES([
         Makefile
         src/Makefile
+        tests/Makefile
         ])
 AC_OUTPUT
